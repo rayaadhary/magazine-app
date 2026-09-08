@@ -207,58 +207,6 @@ body {
   justify-content: center;
 }
 
-/* Thumbnail strip */
-.fb-thumbs {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 10px 12px;
-  max-width: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-  flex-shrink: 0;
-}
-.fb-thumbs::-webkit-scrollbar { height: 5px; }
-.fb-thumbs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.fb-thumb {
-  flex-shrink: 0;
-  width: 56px;
-  border: 2px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  cursor: pointer;
-  padding: 0;
-  background: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  position: relative;
-}
-.fb-thumb img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 2px;
-}
-.fb-thumb-num {
-  display: block;
-  font-size: 0.6rem;
-  color: var(--text-light);
-  text-align: center;
-  padding: 2px 0;
-  background: #fff;
-}
-.fb-thumb:hover {
-  border-color: var(--primary-accent);
-}
-.fb-thumb-active {
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 1px var(--primary-light);
-}
-.fb-thumb-active .fb-thumb-num {
-  color: var(--primary-light);
-  font-weight: 700;
-}
-
 /* Toolbar */
 .fb-toolbar {
   display: flex;
@@ -376,28 +324,6 @@ body {
 .fb-fullscreen-body .fb-zoom-wrapper {
   flex: 1;
   min-height: 0;
-}
-.fb-fullscreen-body .fb-thumbs {
-  width: 100%;
-  background: rgba(20,20,20,0.8);
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-.fb-fullscreen-body .fb-thumb {
-  border-color: rgba(255,255,255,0.1);
-}
-.fb-fullscreen-body .fb-thumb img {
-  border-radius: 2px;
-}
-.fb-fullscreen-body .fb-thumb-num {
-  background: rgba(30,30,30,0.9);
-  color: rgba(255,255,255,0.5);
-}
-.fb-fullscreen-body .fb-thumb-active {
-  border-color: #fff;
-}
-.fb-fullscreen-body .fb-thumb-active .fb-thumb-num {
-  color: #fff;
-  font-weight: 700;
 }
 
 /* Comments */
@@ -696,10 +622,7 @@ body {
     padding: 6px 10px;
     gap: 6px;
   }
-  .fb-container-mobile .fb-toolbar .fb-toolbar-right .fb-zoom-group { display: none; }
-  .fb-container-mobile .fb-toolbar .fb-toolbar-right .fb-btn[aria-label="Thumbnail"] { display: none; }
-  .fb-thumbs { gap: 6px; padding: 8px; }
-  .fb-thumb { width: 44px; }
+  .fb-toolbar-right .fb-zoom-group { display: none; }
   .fb-slider { width: 60px; }
   .fb-page-num { font-size: 0.75rem; min-width: 50px; }
   .fb-btn { min-width: 28px; height: 28px; font-size: 0.9rem; }

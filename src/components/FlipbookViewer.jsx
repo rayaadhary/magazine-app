@@ -41,12 +41,10 @@ export default function FlipbookViewer({ pdfUrl }) {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
-  const [showThumbs, setShowThumbs] = useState(true);
   const [zoom, setZoom] = useState(1);
   const [size, setSize] = useState({ pageWidth: 300, pageHeight: 400 });
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const flipRef = useRef(null);
-  const thumbsRef = useRef(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
@@ -118,12 +116,6 @@ export default function FlipbookViewer({ pdfUrl }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [fullscreen]);
 
-  useEffect(() => {
-    if (!thumbsRef.current || !showThumbs) return;
-    const active = thumbsRef.current.querySelector(".fb-thumb-active");
-    if (active) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-  }, [currentPage, showThumbs]);
-
   const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP));
   const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
   const zoomReset = () => setZoom(1);
@@ -156,22 +148,6 @@ export default function FlipbookViewer({ pdfUrl }) {
     </HTMLFlipBook>
   );
 
-  const thumbnailStrip = (
-    <div className="fb-thumbs" ref={thumbsRef}>
-      {pages.map((p, i) => (
-        <button
-          key={i}
-          className={`fb-thumb ${i === currentPage ? "fb-thumb-active" : ""}`}
-          onClick={() => goToPage(i)}
-          aria-label={`Halaman ${i + 1}`}
-        >
-          <img src={p.data} alt={`Halaman ${i + 1}`} draggable={false} />
-          <span className="fb-thumb-num">{i + 1}</span>
-        </button>
-      ))}
-    </div>
-  );
-
   const toolbar = (
     <div className={`fb-toolbar ${fullscreen ? "fb-toolbar-fs" : ""}`}>
       <div className="fb-toolbar-left">
@@ -202,13 +178,6 @@ export default function FlipbookViewer({ pdfUrl }) {
           </button>
           <button onClick={zoomIn} disabled={zoom >= ZOOM_MAX} className="fb-btn" aria-label="Perbesar">+</button>
         </div>
-        <button
-          onClick={() => setShowThumbs((s) => !s)}
-          className={`fb-btn ${showThumbs ? "fb-btn-active" : ""}`}
-          aria-label="Thumbnail"
-        >
-          ☰
-        </button>
         {fullscreen ? (
           <button onClick={() => { setFullscreen(false); setCurrentPage(0); setZoom(1); }} className="fb-btn fb-close-btn" aria-label="Tutup">
             ✕
@@ -229,7 +198,6 @@ export default function FlipbookViewer({ pdfUrl }) {
           <div className="fb-zoom-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: "center center" }}>
             {flipbook}
           </div>
-          {showThumbs && thumbnailStrip}
           {toolbar}
         </div>
       </div>
@@ -250,7 +218,6 @@ export default function FlipbookViewer({ pdfUrl }) {
       <div className="fb-zoom-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: "top center" }}>
         {flipbook}
       </div>
-      {showThumbs && thumbnailStrip}
       {toolbar}
     </div>
   );
