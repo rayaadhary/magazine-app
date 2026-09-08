@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMagazines, magazinePdfUrl } from "../api";
-import * as pdfjsLib from "pdfjs-dist";
+import { pdfjs } from "react-pdf";
 
 async function renderThumb(pdfUrl) {
   try {
-    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+    const pdf = await pdfjs.getDocument(pdfUrl).promise;
     const page = await pdf.getPage(1);
     const vp = page.getViewport({ scale: 0.4 });
     const canvas = document.createElement("canvas");

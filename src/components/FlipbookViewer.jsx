@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import HTMLFlipBook from "react-pageflip";
-import * as pdfjsLib from "pdfjs-dist";
+import { pdfjs } from "react-pdf";
 
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 3;
@@ -83,7 +83,7 @@ export default function FlipbookViewer({ pdfUrl }) {
     setCurrentPage(0);
 
     const loadPdf = async () => {
-      const pdf = await withTimeout(pdfjsLib.getDocument(pdfUrl).promise, PDF_LOAD_TIMEOUT);
+      const pdf = await withTimeout(pdfjs.getDocument(pdfUrl).promise, PDF_LOAD_TIMEOUT);
       pdfRef.current = pdf;
       const total = pdf.numPages;
       const all = new Array(total).fill(0);
