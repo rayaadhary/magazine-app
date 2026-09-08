@@ -5,7 +5,7 @@ import FlipbookViewer from "../components/FlipbookViewer";
 import CommentSection from "../components/CommentSection";
 import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
 async function renderThumb(pdfUrl) {
   try {

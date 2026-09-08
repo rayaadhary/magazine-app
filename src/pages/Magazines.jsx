@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getMagazines, magazinePdfUrl } from "../api";
 import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
 async function renderThumb(pdfUrl) {
   try {
@@ -26,16 +26,21 @@ export default function Magazines() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     getMagazines()
-      .then(async (list) => {
+      .then((list) => {
+        if (cancelled) return;
         setMagazines(list);
-        const entries = await Promise.all(
+        setLoading(false);
+        // ponytail: thumbnails load async, don't block page render
+        Promise.all(
           list.map(async (m) => [m.id, await renderThumb(magazinePdfUrl(m.id))])
-        );
-        setThumbs(Object.fromEntries(entries));
+        ).then((entries) => {
+          if (!cancelled) setThumbs(Object.fromEntries(entries));
+        });
       })
-      .catch(() => setMagazines([]))
-      .finally(() => setLoading(false));
+      .catch(() => { if (!cancelled) { setMagazines([]); setLoading(false); } });
+    return () => { cancelled = true; };
   }, []);
 
   if (loading) {
