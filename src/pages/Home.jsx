@@ -29,18 +29,23 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     Promise.all([getLatestMagazine(), getMagazines()])
-      .then(async ([latest, all]) => {
+      .then(([latest, all]) => {
+        if (cancelled) return;
         setMagazine(latest);
         const filtered = all.filter((m) => m.id !== latest?.id).slice(0, 4);
         setOthers(filtered);
-        const entries = await Promise.all(
+        setLoading(false);
+        // ponytail: thumbnails load async, don't block page render
+        Promise.all(
           filtered.map(async (m) => [m.id, await renderThumb(magazinePdfUrl(m.id))])
-        );
-        setThumbs(Object.fromEntries(entries));
+        ).then((entries) => {
+          if (!cancelled) setThumbs(Object.fromEntries(entries));
+        });
       })
-      .catch(() => { setMagazine(null); setOthers([]); })
-      .finally(() => setLoading(false));
+      .catch(() => { if (!cancelled) { setMagazine(null); setOthers([]); setLoading(false); } });
+    return () => { cancelled = true; };
   }, []);
 
   if (loading) return <div className="page-loading">Memuat...</div>;

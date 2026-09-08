@@ -9,6 +9,14 @@ const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.25;
 const RENDER_SCALE = 1;
 const BATCH_SIZE = 3;
+const PDF_LOAD_TIMEOUT = 15000;
+
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms)),
+  ]);
+}
 
 function getFlipbookSize(firstPage, fullscreen, isMobile) {
   const vw = window.innerWidth;
@@ -54,6 +62,7 @@ async function renderPage(pdf, pageNum) {
 export default function FlipbookViewer({ pdfUrl }) {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -72,10 +81,11 @@ export default function FlipbookViewer({ pdfUrl }) {
     if (!pdfUrl) return;
     setLoading(true);
     setPages([]);
+    setError(null);
     setCurrentPage(0);
 
     const loadPdf = async () => {
-      const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+      const pdf = await withTimeout(pdfjsLib.getDocument(pdfUrl).promise, PDF_LOAD_TIMEOUT);
       pdfRef.current = pdf;
       const total = pdf.numPages;
       const all = new Array(total).fill(null);
@@ -98,7 +108,10 @@ export default function FlipbookViewer({ pdfUrl }) {
         setPages([...all]);
       }
     };
-    loadPdf().catch(() => setLoading(false));
+    loadPdf().catch((e) => {
+      setError(e.message === "timeout" ? "Gagal memuat PDF. Periksa koneksi internet." : "Gagal memuat majalah.");
+      setLoading(false);
+    });
 
     return () => { pdfRef.current = null; };
   }, [pdfUrl]);
@@ -151,6 +164,7 @@ export default function FlipbookViewer({ pdfUrl }) {
   }, []);
 
   if (loading) return <div className="fb-loading">Memuat majalah...</div>;
+  if (error) return <div className="fb-loading" style={{ color: "#c0392b" }}>{error}</div>;
   if (!pages.length) return <div className="fb-loading">Tidak ada halaman</div>;
 
   const totalRealPages = pages.length;
