@@ -3,17 +3,41 @@ import { Link } from "react-router-dom";
 import { getLatestMagazine, getMagazines, magazinePdfUrl } from "../api";
 import FlipbookViewer from "../components/FlipbookViewer";
 import CommentSection from "../components/CommentSection";
+import * as pdfjsLib from "pdfjs-dist";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
+async function renderThumb(pdfUrl) {
+  try {
+    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+    const page = await pdf.getPage(1);
+    const vp = page.getViewport({ scale: 0.6 });
+    const canvas = document.createElement("canvas");
+    canvas.width = vp.width;
+    canvas.height = vp.height;
+    await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
+    return canvas.toDataURL("image/jpeg", 0.6);
+  } catch {
+    return null;
+  }
+}
 
 export default function Home() {
   const [magazine, setMagazine] = useState(null);
   const [others, setOthers] = useState([]);
+  const [thumbs, setThumbs] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([getLatestMagazine(), getMagazines()])
-      .then(([latest, all]) => {
+      .then(async ([latest, all]) => {
         setMagazine(latest);
-        setOthers(all.filter((m) => m.id !== latest?.id).slice(0, 4));
+        const filtered = all.filter((m) => m.id !== latest?.id).slice(0, 4);
+        setOthers(filtered);
+        const entries = await Promise.all(
+          filtered.map(async (m) => [m.id, await renderThumb(magazinePdfUrl(m.id))])
+        );
+        setThumbs(Object.fromEntries(entries));
       })
       .catch(() => { setMagazine(null); setOthers([]); })
       .finally(() => setLoading(false));
@@ -45,19 +69,19 @@ export default function Home() {
             <h2 className="home-section-title">Majalah Lainnya</h2>
             <Link to="/magazines" className="home-section-link">Lihat Semua</Link>
           </div>
-          <div className="magazines-grid">
-            {others.map((m) => (
-              <Link to={`/magazines/${m.id}`} key={m.id} className="magazine-card">
-                <div className="magazine-card-cover">
-                  <span className="cover-placeholder">PDF</span>
-                </div>
-                <div className="magazine-card-info">
-                  <h3>{m.title}</h3>
-                  {m.description && <p>{m.description}</p>}
-                  <time>{new Date(m.published_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</time>
-                </div>
-              </Link>
-            ))}
+          <div className="magazines-shelf">
+            <div className="shelf-row">
+              {others.map((m) => (
+                <Link to={`/magazines/${m.id}`} key={m.id} className="shelf-item">
+                  {thumbs[m.id] ? (
+                    <img src={thumbs[m.id]} alt={m.title} className="shelf-cover" />
+                  ) : (
+                    <div className="shelf-cover-placeholder">PDF</div>
+                  )}
+                  <span className="shelf-title">{m.title}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       )}
