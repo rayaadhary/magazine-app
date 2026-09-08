@@ -54,7 +54,6 @@ async function renderPage(pdf, pageNum) {
 export default function FlipbookViewer({ pdfUrl }) {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showCover, setShowCover] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -73,7 +72,7 @@ export default function FlipbookViewer({ pdfUrl }) {
     if (!pdfUrl) return;
     setLoading(true);
     setPages([]);
-    setShowCover(true);
+    setCurrentPage(0);
 
     const loadPdf = async () => {
       const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
@@ -106,13 +105,13 @@ export default function FlipbookViewer({ pdfUrl }) {
 
   useEffect(() => {
     if (!pages.length) return;
-    const ref = showCover ? pages[0] : pages[0];
+    const ref = pages[0];
     if (!ref) return;
     const update = () => setSize(getFlipbookSize(ref, fullscreen, isMobile));
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, [pages, fullscreen, isMobile, showCover]);
+  }, [pages, fullscreen, isMobile]);
 
   useEffect(() => {
     if (fullscreen) {
@@ -125,7 +124,6 @@ export default function FlipbookViewer({ pdfUrl }) {
     const handleKey = (e) => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
-        if (showCover) { openFlipbook(); return; }
         flipRef.current?.pageFlip().flipNext();
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
         e.preventDefault();
@@ -136,24 +134,13 @@ export default function FlipbookViewer({ pdfUrl }) {
         setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
       } else if (e.key === "Escape" && fullscreen) {
         setFullscreen(false);
-        setShowCover(true);
         setCurrentPage(0);
         setZoom(1);
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [fullscreen, showCover]);
-
-  // Mobile: skip cover
-  useEffect(() => {
-    if (isMobile && pages.length) setShowCover(false);
-  }, [isMobile, pages.length]);
-
-  const openFlipbook = useCallback(() => {
-    setShowCover(false);
-    setCurrentPage(0);
-  }, []);
+  }, [fullscreen]);
 
   const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP));
   const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
@@ -166,25 +153,24 @@ export default function FlipbookViewer({ pdfUrl }) {
   if (loading) return <div className="fb-loading">Memuat majalah...</div>;
   if (!pages.length) return <div className="fb-loading">Tidak ada halaman</div>;
 
-  // Cover pages: index 0 only, flipbook pages: index 1+
-  const coverData = pages[0]?.data;
-  const flipbookPages = showCover ? pages.slice(1) : pages;
+  const totalRealPages = pages.length;
 
   const flipbook = (
     <HTMLFlipBook
       ref={flipRef}
       width={size.pageWidth}
       height={size.pageHeight}
+      showCover={true}
       drawShadow={true}
       flippingTime={800}
       usePortrait={isMobile}
       startZIndex={0}
       onFlip={(e) => setCurrentPage(e.data)}
     >
-      {flipbookPages.map((p, i) => (
-        <div key={showCover ? i + 1 : i} className="fb-page">
+      {pages.map((p, i) => (
+        <div key={i} className="fb-page">
           {p ? (
-            <img src={p.data} alt={`Halaman ${showCover ? i + 2 : i + 1}`} draggable={false} />
+            <img src={p.data} alt={`Halaman ${i + 1}`} draggable={false} />
           ) : (
             <div className="fb-page-placeholder" />
           )}
@@ -193,13 +179,10 @@ export default function FlipbookViewer({ pdfUrl }) {
     </HTMLFlipBook>
   );
 
-  const totalRealPages = pages.length;
-  const displayPage = showCover ? 1 : (currentPage + 2);
-
   const toolbar = (
     <div className={`fb-toolbar ${fullscreen ? "fb-toolbar-fs" : ""}`}>
       <div className="fb-toolbar-left">
-        <button onClick={() => flipRef.current?.pageFlip().flipPrev()} disabled={currentPage <= 0 && !showCover} className="fb-btn" aria-label="Sebelumnya">
+        <button onClick={() => flipRef.current?.pageFlip().flipPrev()} disabled={currentPage <= 0} className="fb-btn" aria-label="Sebelumnya">
           ‹
         </button>
         <span className="fb-page-info">
@@ -207,17 +190,13 @@ export default function FlipbookViewer({ pdfUrl }) {
             type="range"
             min={0}
             max={totalRealPages - 1}
-            value={showCover ? 0 : currentPage + 1}
-            onChange={(e) => {
-              const v = +e.target.value;
-              if (v === 0) { setShowCover(true); setCurrentPage(0); }
-              else { setShowCover(false); goToPage(v - 1); }
-            }}
+            value={currentPage}
+            onChange={(e) => goToPage(+e.target.value)}
             className="fb-slider"
           />
-          <span className="fb-page-num">{displayPage} / {totalRealPages}</span>
+          <span className="fb-page-num">{currentPage + 1} / {totalRealPages}</span>
         </span>
-        <button onClick={() => { if (showCover) openFlipbook(); else flipRef.current?.pageFlip().flipNext(); }} disabled={!showCover && currentPage >= flipbookPages.length - 1} className="fb-btn" aria-label="Selanjutnya">
+        <button onClick={() => flipRef.current?.pageFlip().flipNext()} disabled={currentPage >= totalRealPages - 1} className="fb-btn" aria-label="Selanjutnya">
           ›
         </button>
       </div>
@@ -231,45 +210,17 @@ export default function FlipbookViewer({ pdfUrl }) {
           <button onClick={zoomIn} disabled={zoom >= ZOOM_MAX} className="fb-btn" aria-label="Perbesar">+</button>
         </div>
         {fullscreen ? (
-          <button onClick={() => { setFullscreen(false); setShowCover(true); setCurrentPage(0); setZoom(1); }} className="fb-btn fb-close-btn" aria-label="Tutup">
+          <button onClick={() => { setFullscreen(false); setCurrentPage(0); setZoom(1); }} className="fb-btn fb-close-btn" aria-label="Tutup">
             ✕
           </button>
         ) : (
-          <button onClick={() => { setFullscreen(true); setShowCover(false); setZoom(1); }} className="fb-btn" aria-label="Fullscreen">
+          <button onClick={() => { setFullscreen(true); setZoom(1); }} className="fb-btn" aria-label="Fullscreen">
             ⛶
           </button>
         )}
       </div>
     </div>
   );
-
-  // Cover view (desktop only)
-  if (showCover && coverData) {
-    const cover = (
-      <div className="fb-cover" onClick={openFlipbook}>
-        <img src={coverData} alt="Cover majalah" className="fb-cover-img" draggable={false} />
-        <div className="fb-cover-hint">Klik untuk membuka</div>
-      </div>
-    );
-
-    if (fullscreen) {
-      return (
-        <div className="fb-fullscreen">
-          <div className="fb-fullscreen-body">
-            {cover}
-            {toolbar}
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="fb-container">
-        {cover}
-        {toolbar}
-      </div>
-    );
-  }
 
   if (fullscreen) {
     return (
