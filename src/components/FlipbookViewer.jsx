@@ -8,40 +8,32 @@ const ZOOM_MIN = 1;
 const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.25;
 
-function getFlipbookSize(firstPage, fullscreen) {
+function getFlipbookSize(firstPage, fullscreen, isMobile) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const aspect = firstPage.width / firstPage.height;
 
-  if (fullscreen) {
-    const maxW = vw * 0.95;
-    const maxH = vh - 110;
-    let pageW = maxW / 2;
+  if (isMobile || fullscreen) {
+    const maxW = fullscreen ? vw * 0.95 : vw - 24;
+    const maxH = fullscreen ? vh - 110 : vh * 0.55;
+    let pageW = maxW;
     let pageH = pageW / aspect;
     if (pageH > maxH) {
       pageH = maxH;
       pageW = pageH * aspect;
     }
-    return { halfWidth: Math.floor(pageW), bookHeight: Math.floor(pageH) };
+    return { pageWidth: Math.floor(pageW), pageHeight: Math.floor(pageH) };
   }
 
-  const isMobile = vw < 640;
-  if (isMobile) {
-    const maxH = Math.min(vw - 24, 420);
-    const bookH = Math.min(firstPage.height, maxH);
-    const bookW = bookH * aspect;
-    return { halfWidth: Math.floor(bookW), bookHeight: bookH, isMobile: true };
-  }
-
-  const maxW = vw * 0.85;
-  const maxH = vh * 0.68;
+  const maxW = vw * 0.82;
+  const maxH = vh * 0.65;
   let pageW = maxW / 2;
   let pageH = pageW / aspect;
   if (pageH > maxH) {
     pageH = maxH;
     pageW = pageH * aspect;
   }
-  return { halfWidth: Math.floor(pageW), bookHeight: Math.floor(pageH), isMobile: false };
+  return { pageWidth: Math.floor(pageW), pageHeight: Math.floor(pageH) };
 }
 
 export default function FlipbookViewer({ pdfUrl }) {
@@ -51,9 +43,16 @@ export default function FlipbookViewer({ pdfUrl }) {
   const [fullscreen, setFullscreen] = useState(false);
   const [showThumbs, setShowThumbs] = useState(true);
   const [zoom, setZoom] = useState(1);
-  const [size, setSize] = useState({ halfWidth: 300, bookHeight: 400, isMobile: false });
+  const [size, setSize] = useState({ pageWidth: 300, pageHeight: 400 });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const flipRef = useRef(null);
   const thumbsRef = useRef(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     if (!pdfUrl) return;
@@ -84,11 +83,11 @@ export default function FlipbookViewer({ pdfUrl }) {
 
   useEffect(() => {
     if (!pages.length) return;
-    const update = () => setSize(getFlipbookSize(pages[0], fullscreen));
+    const update = () => setSize(getFlipbookSize(pages[0], fullscreen, isMobile));
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, [pages, fullscreen]);
+  }, [pages, fullscreen, isMobile]);
 
   useEffect(() => {
     if (fullscreen) {
@@ -97,7 +96,6 @@ export default function FlipbookViewer({ pdfUrl }) {
     }
   }, [fullscreen]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
@@ -120,7 +118,6 @@ export default function FlipbookViewer({ pdfUrl }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [fullscreen]);
 
-  // Scroll active thumbnail into view
   useEffect(() => {
     if (!thumbsRef.current || !showThumbs) return;
     const active = thumbsRef.current.querySelector(".fb-thumb-active");
@@ -138,17 +135,17 @@ export default function FlipbookViewer({ pdfUrl }) {
   if (loading) return <div className="fb-loading">Memuat majalah...</div>;
   if (!pages.length) return <div className="fb-loading">Tidak ada halaman</div>;
 
-  const isMobile = size.isMobile;
+  const usePortrait = isMobile || fullscreen;
 
   const flipbook = (
     <HTMLFlipBook
       ref={flipRef}
-      width={size.halfWidth}
-      height={size.bookHeight}
+      width={size.pageWidth}
+      height={size.pageHeight}
       drawShadow={true}
       flippingTime={800}
+      usePortrait={usePortrait}
       startZIndex={0}
-      autoSize={true}
       onFlip={(e) => setCurrentPage(e.data)}
     >
       {pages.map((p, i) => (
@@ -241,13 +238,9 @@ export default function FlipbookViewer({ pdfUrl }) {
 
   if (isMobile) {
     return (
-      <div className="fb-container">
-        <div className="fb-cover-preview" onClick={() => { setCurrentPage(0); setFullscreen(true); }}>
-          <img src={pages[0]?.data} alt="Cover majalah" className="fb-cover-img" />
-          <div className="fb-cover-overlay">
-            <span className="fb-cover-play">Buka Majalah</span>
-          </div>
-        </div>
+      <div className="fb-container fb-container-mobile">
+        {flipbook}
+        {toolbar}
       </div>
     );
   }
