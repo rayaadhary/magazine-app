@@ -77,25 +77,26 @@ export default function FlipbookViewer({ pdfUrl }) {
       const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
       pdfRef.current = pdf;
       const total = pdf.numPages;
-      const all = new Array(total).fill(null);
+      // prepend blank page so cover shows solo on right side
+      const all = [null, ...new Array(total).fill(null)];
 
-      // Render first batch immediately
+      // Render first batch (skip index 0 = blank)
       const firstBatch = Math.min(BATCH_SIZE, total);
       const firstPages = await Promise.all(
         Array.from({ length: firstBatch }, (_, i) => renderPage(pdf, i + 1))
       );
-      for (let i = 0; i < firstBatch; i++) all[i] = firstPages[i];
+      for (let i = 0; i < firstBatch; i++) all[i + 1] = firstPages[i];
       setPages([...all]);
       setLoading(false);
 
-      // Render remaining in batches of BATCH_SIZE
+      // Render remaining in batches
       for (let start = firstBatch; start < total; start += BATCH_SIZE) {
         if (pdfRef.current !== pdf) return;
         const end = Math.min(start + BATCH_SIZE, total);
         const batch = await Promise.all(
           Array.from({ length: end - start }, (_, i) => renderPage(pdf, start + i + 1))
         );
-        for (let i = 0; i < batch.length; i++) all[start + i] = batch[i];
+        for (let i = 0; i < batch.length; i++) all[start + i + 1] = batch[i];
         setPages([...all]);
       }
     };
@@ -140,6 +141,13 @@ export default function FlipbookViewer({ pdfUrl }) {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [fullscreen]);
+
+  // On mobile, skip blank page and start at cover
+  useEffect(() => {
+    if (pages.length && isMobile && flipRef.current) {
+      flipRef.current.pageFlip().turnToPage(1);
+    }
+  }, [pages, isMobile]);
 
   const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP));
   const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
@@ -192,7 +200,7 @@ export default function FlipbookViewer({ pdfUrl }) {
             onChange={(e) => goToPage(+e.target.value)}
             className="fb-slider"
           />
-          <span className="fb-page-num">{currentPage + 1} / {pages.length}</span>
+          <span className="fb-page-num">{currentPage === 0 ? 1 : currentPage} / {pages.length - 1}</span>
         </span>
         <button onClick={() => flipRef.current?.pageFlip().flipNext()} disabled={currentPage >= pages.length - 1} className="fb-btn" aria-label="Selanjutnya">
           ›
