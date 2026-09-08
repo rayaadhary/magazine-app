@@ -206,6 +206,30 @@ body {
   height: 100%;
   background: var(--bg);
 }
+
+/* Cover */
+.fb-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.fb-cover:hover { transform: scale(1.02); }
+.fb-cover-img {
+  max-height: 70vh;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+.fb-cover-hint {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+}
+.fb-fullscreen .fb-cover-hint { color: rgba(255,255,255,0.5); }
 .fb-zoom-wrapper {
   transition: transform 0.2s ease;
   display: flex;
