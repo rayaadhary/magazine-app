@@ -107,7 +107,9 @@ export default function FlipbookViewer({ pdfUrl }) {
 
   useEffect(() => {
     if (!pages.length) return;
-    const update = () => setSize(getFlipbookSize(pages[0], fullscreen, isMobile));
+    const firstPage = pages.find((p) => p !== null);
+    if (!firstPage) return;
+    const update = () => setSize(getFlipbookSize(firstPage, fullscreen, isMobile));
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
