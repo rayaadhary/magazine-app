@@ -54,7 +54,6 @@ export default function Home() {
         <time className="home-hero-date">
           {new Date(magazine.published_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
         </time>
-        <a href="#flipbook" className="home-hero-btn">Baca Sekarang</a>
       </section>
 
       <section id="flipbook">

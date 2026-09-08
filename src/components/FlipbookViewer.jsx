@@ -135,12 +135,9 @@ export default function FlipbookViewer({ pdfUrl }) {
   if (isMobile) {
     return (
       <div className="flipbook-container">
-        <div className="flipbook-cover-preview">
+        <div className="flipbook-cover-preview" onClick={() => { setCurrentPage(0); setFullscreen(true); }}>
           <img src={coverSrc} alt="Cover majalah" className="flipbook-cover-img" />
         </div>
-        <button className="flipbook-open-btn" onClick={() => { setCurrentPage(0); setFullscreen(true); }}>
-          Buka Majalah
-        </button>
       </div>
     );
   }
