@@ -10,8 +10,8 @@ function getFlipbookSize(firstPage, fullscreen) {
   const aspect = firstPage.width / firstPage.height;
 
   if (fullscreen) {
-    const maxW = vw * 0.92;
-    const maxH = vh - 80;
+    const maxW = vw * 0.98;
+    const maxH = vh - 56;
     let bookW = maxW;
     let bookH = bookW / aspect;
     if (bookH > maxH) {
@@ -22,10 +22,22 @@ function getFlipbookSize(firstPage, fullscreen) {
   }
 
   const isMobile = vw < 640;
-  const maxH = isMobile ? Math.min(vw - 24, 420) : 600;
-  const bookH = Math.min(firstPage.height, maxH);
-  const bookW = bookH * aspect;
-  return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH, isMobile };
+  if (isMobile) {
+    const maxH = Math.min(vw - 24, 420);
+    const bookH = Math.min(firstPage.height, maxH);
+    const bookW = bookH * aspect;
+    return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH, isMobile: true };
+  }
+
+  const maxW = Math.min(vw * 0.85, 1000);
+  const maxH = Math.min(vh * 0.65, 800);
+  let bookW = maxW;
+  let bookH = bookW / aspect;
+  if (bookH > maxH) {
+    bookH = maxH;
+    bookW = bookH * aspect;
+  }
+  return { halfWidth: Math.floor(bookW / 2), bookHeight: Math.floor(bookH), isMobile: false };
 }
 
 export default function FlipbookViewer({ pdfUrl }) {
@@ -89,7 +101,6 @@ export default function FlipbookViewer({ pdfUrl }) {
       ref={flipRef}
       width={size.halfWidth}
       height={size.bookHeight}
-      showCover={true}
       drawShadow={true}
       flippingTime={800}
       usePortrait={true}
