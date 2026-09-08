@@ -129,6 +129,138 @@ body {
 
 /* Home / Magazine detail */
 .home-page { max-width: 900px; margin: 0 auto; }
+
+/* Home hero */
+.home-hero {
+  text-align: center;
+  padding: 40px 16px 32px;
+}
+.home-hero-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.home-hero-desc {
+  color: var(--text-light);
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+.home-hero-date {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+.home-hero-btn {
+  display: inline-block;
+  padding: 10px 28px;
+  background: var(--primary-light);
+  color: #fff;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.home-hero-btn:hover { background: var(--primary-accent); }
+
+/* Home others section */
+.home-others {
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
+.home-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.home-section-title {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+.home-section-link {
+  font-size: 0.85rem;
+  color: var(--primary-accent);
+  text-decoration: none;
+}
+.home-section-link:hover { text-decoration: underline; }
+
+/* Flipbook cover preview (mobile) */
+.flipbook-cover-preview {
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  margin-bottom: 16px;
+}
+.flipbook-cover-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.flipbook-open-btn {
+  padding: 12px 32px;
+  background: var(--primary-light);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 48px;
+  transition: background 0.2s;
+}
+.flipbook-open-btn:hover { background: var(--primary-accent); }
+
+/* Flipbook fullscreen */
+.flipbook-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+}
+.flipbook-fullscreen-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 1001;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.flipbook-fullscreen-close:hover { background: rgba(255,255,255,0.3); }
+.flipbook-fullscreen-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.flipbook-fullscreen .flipbook-controls button {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.flipbook-fullscreen .flipbook-controls button:hover { background: rgba(255,255,255,0.2); }
+.flipbook-fullscreen .flipbook-controls span { color: rgba(255,255,255,0.7); }
+
+/* Home / Magazine detail */
 .magazine-title {
   text-align: center;
   font-size: 1.5rem;
@@ -398,6 +530,11 @@ body {
 
   /* Pages */
   .home-page { padding: 0 12px; }
+  .home-hero { padding: 24px 12px 20px; }
+  .home-hero-title { font-size: 1.4rem; }
+  .home-hero-desc { font-size: 0.9rem; }
+  .home-section-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .home-section-title { font-size: 1.1rem; }
   .magazine-title { font-size: 1.2rem; }
   .magazine-desc { font-size: 0.9rem; margin-bottom: 16px; }
 
