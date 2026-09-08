@@ -14,15 +14,15 @@ function getFlipbookSize(firstPage, fullscreen) {
   const aspect = firstPage.width / firstPage.height;
 
   if (fullscreen) {
-    const maxW = vw * 0.98;
-    const maxH = vh - 100;
-    let bookW = maxW;
-    let bookH = bookW / aspect;
-    if (bookH > maxH) {
-      bookH = maxH;
-      bookW = bookH * aspect;
+    const maxW = vw * 0.95;
+    const maxH = vh - 110;
+    let pageW = maxW / 2;
+    let pageH = pageW / aspect;
+    if (pageH > maxH) {
+      pageH = maxH;
+      pageW = pageH * aspect;
     }
-    return { halfWidth: Math.floor(bookW / 2), bookHeight: Math.floor(bookH) };
+    return { halfWidth: Math.floor(pageW), bookHeight: Math.floor(pageH) };
   }
 
   const isMobile = vw < 640;
@@ -30,18 +30,18 @@ function getFlipbookSize(firstPage, fullscreen) {
     const maxH = Math.min(vw - 24, 420);
     const bookH = Math.min(firstPage.height, maxH);
     const bookW = bookH * aspect;
-    return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH, isMobile: true };
+    return { halfWidth: Math.floor(bookW), bookHeight: bookH, isMobile: true };
   }
 
-  const maxW = vw * 0.88;
-  const maxH = vh * 0.7;
-  let bookW = maxW;
-  let bookH = bookW / aspect;
-  if (bookH > maxH) {
-    bookH = maxH;
-    bookW = bookH * aspect;
+  const maxW = vw * 0.85;
+  const maxH = vh * 0.68;
+  let pageW = maxW / 2;
+  let pageH = pageW / aspect;
+  if (pageH > maxH) {
+    pageH = maxH;
+    pageW = pageH * aspect;
   }
-  return { halfWidth: Math.floor(bookW / 2), bookHeight: Math.floor(bookH), isMobile: false };
+  return { halfWidth: Math.floor(pageW), bookHeight: Math.floor(pageH), isMobile: false };
 }
 
 export default function FlipbookViewer({ pdfUrl }) {
@@ -147,7 +147,6 @@ export default function FlipbookViewer({ pdfUrl }) {
       height={size.bookHeight}
       drawShadow={true}
       flippingTime={800}
-      usePortrait={true}
       startZIndex={0}
       autoSize={true}
       onFlip={(e) => setCurrentPage(e.data)}

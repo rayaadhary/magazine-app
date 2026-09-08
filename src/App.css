@@ -187,7 +187,6 @@ body {
   flex-direction: column;
   align-items: center;
   margin-bottom: 32px;
-  overflow: hidden;
 }
 .fb-page {
   display: flex;
@@ -413,7 +412,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 8px 4px 0;
-  overflow: hidden;
+  overflow: auto;
 }
 .fb-fullscreen-body .fb-zoom-wrapper {
   flex: 1;
