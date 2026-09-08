@@ -5,8 +5,6 @@ import FlipbookViewer from "../components/FlipbookViewer";
 import CommentSection from "../components/CommentSection";
 import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-
 async function renderThumb(pdfUrl) {
   try {
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;

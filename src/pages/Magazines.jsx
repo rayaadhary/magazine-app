@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { getMagazines, magazinePdfUrl } from "../api";
 import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-
 async function renderThumb(pdfUrl) {
   try {
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
