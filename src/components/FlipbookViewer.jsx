@@ -160,7 +160,7 @@ export default function FlipbookViewer({ pdfUrl }) {
       ref={flipRef}
       width={size.pageWidth}
       height={size.pageHeight}
-      showCover={true}
+      showCover={!isMobile}
       drawShadow={true}
       flippingTime={800}
       usePortrait={isMobile}
