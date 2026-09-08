@@ -86,7 +86,7 @@ export default function FlipbookViewer({ pdfUrl }) {
       const pdf = await withTimeout(pdfjsLib.getDocument(pdfUrl).promise, PDF_LOAD_TIMEOUT);
       pdfRef.current = pdf;
       const total = pdf.numPages;
-      const all = new Array(total).fill(null);
+      const all = new Array(total).fill(0);
 
       const firstBatch = Math.min(BATCH_SIZE, total);
       const firstPages = await Promise.all(
