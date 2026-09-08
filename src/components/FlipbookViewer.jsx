@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import HTMLFlipBook from "react-pageflip";
 import * as pdfjsLib from "pdfjs-dist";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 3;
+const ZOOM_STEP = 0.25;
 
 function getFlipbookSize(firstPage, fullscreen) {
   const vw = window.innerWidth;
@@ -11,7 +15,7 @@ function getFlipbookSize(firstPage, fullscreen) {
 
   if (fullscreen) {
     const maxW = vw * 0.98;
-    const maxH = vh - 56;
+    const maxH = vh - 100;
     let bookW = maxW;
     let bookH = bookW / aspect;
     if (bookH > maxH) {
@@ -29,8 +33,8 @@ function getFlipbookSize(firstPage, fullscreen) {
     return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH, isMobile: true };
   }
 
-  const maxW = vw * 0.92;
-  const maxH = vh * 0.75;
+  const maxW = vw * 0.88;
+  const maxH = vh * 0.7;
   let bookW = maxW;
   let bookH = bookW / aspect;
   if (bookH > maxH) {
@@ -45,8 +49,11 @@ export default function FlipbookViewer({ pdfUrl }) {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
+  const [showThumbs, setShowThumbs] = useState(true);
+  const [zoom, setZoom] = useState(1);
   const [size, setSize] = useState({ halfWidth: 300, bookHeight: 400, isMobile: false });
   const flipRef = useRef(null);
+  const thumbsRef = useRef(null);
 
   useEffect(() => {
     if (!pdfUrl) return;
@@ -90,11 +97,48 @@ export default function FlipbookViewer({ pdfUrl }) {
     }
   }, [fullscreen]);
 
-  if (loading) return <div className="flipbook-loading">Memuat majalah...</div>;
-  if (!pages.length) return <div className="flipbook-loading">Tidak ada halaman</div>;
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        flipRef.current?.pageFlip().flipNext();
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        flipRef.current?.pageFlip().flipPrev();
+      } else if (e.key === "+" || e.key === "=") {
+        setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP));
+      } else if (e.key === "-") {
+        setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
+      } else if (e.key === "Escape" && fullscreen) {
+        setFullscreen(false);
+        setCurrentPage(0);
+        setZoom(1);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [fullscreen]);
+
+  // Scroll active thumbnail into view
+  useEffect(() => {
+    if (!thumbsRef.current || !showThumbs) return;
+    const active = thumbsRef.current.querySelector(".fb-thumb-active");
+    if (active) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [currentPage, showThumbs]);
+
+  const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP));
+  const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
+  const zoomReset = () => setZoom(1);
+
+  const goToPage = useCallback((i) => {
+    flipRef.current?.pageFlip().flip(i);
+  }, []);
+
+  if (loading) return <div className="fb-loading">Memuat majalah...</div>;
+  if (!pages.length) return <div className="fb-loading">Tidak ada halaman</div>;
 
   const isMobile = size.isMobile;
-  const coverSrc = pages[0]?.data;
 
   const flipbook = (
     <HTMLFlipBook
@@ -109,24 +153,88 @@ export default function FlipbookViewer({ pdfUrl }) {
       onFlip={(e) => setCurrentPage(e.data)}
     >
       {pages.map((p, i) => (
-        <div key={i} className="flipbook-page">
-          <img src={p.data} alt={`Halaman ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+        <div key={i} className="fb-page">
+          <img src={p.data} alt={`Halaman ${i + 1}`} draggable={false} />
         </div>
       ))}
     </HTMLFlipBook>
   );
 
+  const thumbnailStrip = (
+    <div className="fb-thumbs" ref={thumbsRef}>
+      {pages.map((p, i) => (
+        <button
+          key={i}
+          className={`fb-thumb ${i === currentPage ? "fb-thumb-active" : ""}`}
+          onClick={() => goToPage(i)}
+          aria-label={`Halaman ${i + 1}`}
+        >
+          <img src={p.data} alt={`Halaman ${i + 1}`} draggable={false} />
+          <span className="fb-thumb-num">{i + 1}</span>
+        </button>
+      ))}
+    </div>
+  );
+
+  const toolbar = (
+    <div className={`fb-toolbar ${fullscreen ? "fb-toolbar-fs" : ""}`}>
+      <div className="fb-toolbar-left">
+        <button onClick={() => flipRef.current?.pageFlip().flipPrev()} disabled={currentPage <= 0} className="fb-btn" aria-label="Sebelumnya">
+          ‹
+        </button>
+        <span className="fb-page-info">
+          <input
+            type="range"
+            min={0}
+            max={pages.length - 1}
+            value={currentPage}
+            onChange={(e) => goToPage(+e.target.value)}
+            className="fb-slider"
+          />
+          <span className="fb-page-num">{currentPage + 1} / {pages.length}</span>
+        </span>
+        <button onClick={() => flipRef.current?.pageFlip().flipNext()} disabled={currentPage >= pages.length - 1} className="fb-btn" aria-label="Selanjutnya">
+          ›
+        </button>
+      </div>
+
+      <div className="fb-toolbar-right">
+        <div className="fb-zoom-group">
+          <button onClick={zoomOut} disabled={zoom <= ZOOM_MIN} className="fb-btn" aria-label="Perkecil">−</button>
+          <button onClick={zoomReset} className="fb-btn fb-zoom-label" aria-label="Reset zoom">
+            {Math.round(zoom * 100)}%
+          </button>
+          <button onClick={zoomIn} disabled={zoom >= ZOOM_MAX} className="fb-btn" aria-label="Perbesar">+</button>
+        </div>
+        <button
+          onClick={() => setShowThumbs((s) => !s)}
+          className={`fb-btn ${showThumbs ? "fb-btn-active" : ""}`}
+          aria-label="Thumbnail"
+        >
+          ☰
+        </button>
+        {fullscreen ? (
+          <button onClick={() => { setFullscreen(false); setCurrentPage(0); setZoom(1); }} className="fb-btn fb-close-btn" aria-label="Tutup">
+            ✕
+          </button>
+        ) : (
+          <button onClick={() => { setFullscreen(true); setZoom(1); }} className="fb-btn" aria-label="Fullscreen">
+            ⛶
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
   if (fullscreen) {
     return (
-      <div className="flipbook-fullscreen">
-        <button className="flipbook-fullscreen-close" onClick={() => { setFullscreen(false); setCurrentPage(0); }} aria-label="Tutup">✕</button>
-        <div className="flipbook-fullscreen-body">
-          {flipbook}
-          <div className="flipbook-controls">
-            <button onClick={() => flipRef.current?.pageFlip().flipPrev()} disabled={currentPage <= 0}>Sebelumnya</button>
-            <span>Halaman {currentPage + 1} / {pages.length}</span>
-            <button onClick={() => flipRef.current?.pageFlip().flipNext()} disabled={currentPage >= pages.length - 1}>Selanjutnya</button>
+      <div className="fb-fullscreen">
+        <div className="fb-fullscreen-body">
+          <div className="fb-zoom-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: "center center" }}>
+            {flipbook}
           </div>
+          {showThumbs && thumbnailStrip}
+          {toolbar}
         </div>
       </div>
     );
@@ -134,22 +242,24 @@ export default function FlipbookViewer({ pdfUrl }) {
 
   if (isMobile) {
     return (
-      <div className="flipbook-container">
-        <div className="flipbook-cover-preview" onClick={() => { setCurrentPage(0); setFullscreen(true); }}>
-          <img src={coverSrc} alt="Cover majalah" className="flipbook-cover-img" />
+      <div className="fb-container">
+        <div className="fb-cover-preview" onClick={() => { setCurrentPage(0); setFullscreen(true); }}>
+          <img src={pages[0]?.data} alt="Cover majalah" className="fb-cover-img" />
+          <div className="fb-cover-overlay">
+            <span className="fb-cover-play">Buka Majalah</span>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flipbook-container">
-      {flipbook}
-      <div className="flipbook-controls">
-        <button onClick={() => flipRef.current?.pageFlip().flipPrev()} disabled={currentPage <= 0}>Sebelumnya</button>
-        <span>Halaman {currentPage + 1} / {pages.length}</span>
-        <button onClick={() => flipRef.current?.pageFlip().flipNext()} disabled={currentPage >= pages.length - 1}>Selanjutnya</button>
+    <div className="fb-container">
+      <div className="fb-zoom-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: "top center" }}>
+        {flipbook}
       </div>
+      {showThumbs && thumbnailStrip}
+      {toolbar}
     </div>
   );
 }
