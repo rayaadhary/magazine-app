@@ -69,7 +69,7 @@ export async function deleteMagazine(id) {
 
 export function magazinePdfUrl(id) {
   const base = import.meta.env.VITE_BACKEND_URL || "";
-  return `${base}/api/magazines/${id}/pdf`;
+  return `${base}/magazines/${id}/pdf`;
 }
 
 export async function getComments(magazineId) {
