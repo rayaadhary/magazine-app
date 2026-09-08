@@ -13,9 +13,9 @@ function getFlipbookSize(firstPage, fullscreen, isMobile) {
   const vh = window.innerHeight;
   const aspect = firstPage.width / firstPage.height;
 
-  if (isMobile || fullscreen) {
-    const maxW = fullscreen ? vw * 0.95 : vw - 24;
-    const maxH = fullscreen ? vh - 110 : vh * 0.55;
+  if (isMobile) {
+    const maxW = vw - 24;
+    const maxH = vh * 0.55;
     let pageW = maxW;
     let pageH = pageW / aspect;
     if (pageH > maxH) {
@@ -25,8 +25,8 @@ function getFlipbookSize(firstPage, fullscreen, isMobile) {
     return { pageWidth: Math.floor(pageW), pageHeight: Math.floor(pageH) };
   }
 
-  const maxW = vw * 0.82;
-  const maxH = vh * 0.65;
+  const maxW = fullscreen ? vw * 0.92 : vw * 0.82;
+  const maxH = fullscreen ? vh - 110 : vh * 0.65;
   let pageW = maxW / 2;
   let pageH = pageW / aspect;
   if (pageH > maxH) {
@@ -135,7 +135,7 @@ export default function FlipbookViewer({ pdfUrl }) {
   if (loading) return <div className="fb-loading">Memuat majalah...</div>;
   if (!pages.length) return <div className="fb-loading">Tidak ada halaman</div>;
 
-  const usePortrait = isMobile || fullscreen;
+  const usePortrait = isMobile;
 
   const flipbook = (
     <HTMLFlipBook

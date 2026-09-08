@@ -693,11 +693,16 @@ body {
   .fb-container-mobile .fb-toolbar {
     border-radius: 0;
     max-width: 100%;
+    padding: 6px 10px;
+    gap: 6px;
   }
+  .fb-container-mobile .fb-toolbar .fb-toolbar-right .fb-zoom-group { display: none; }
+  .fb-container-mobile .fb-toolbar .fb-toolbar-right .fb-btn[aria-label="Thumbnail"] { display: none; }
   .fb-thumbs { gap: 6px; padding: 8px; }
   .fb-thumb { width: 44px; }
   .fb-slider { width: 60px; }
   .fb-page-num { font-size: 0.75rem; min-width: 50px; }
+  .fb-btn { min-width: 28px; height: 28px; font-size: 0.9rem; }
 
   /* Magazine shelf */
   .shelf-row { gap: 14px; padding: 16px 14px 12px; }
