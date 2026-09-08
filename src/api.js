@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_BACKEND_URL || "/api";
+const API_BASE = "/api";
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -68,8 +68,7 @@ export async function deleteMagazine(id) {
 }
 
 export function magazinePdfUrl(id) {
-  const base = import.meta.env.VITE_BACKEND_URL || "";
-  return `${base}/magazines/${id}/pdf`;
+  return `/api/magazines/${id}/pdf`;
 }
 
 export async function getComments(magazineId) {
