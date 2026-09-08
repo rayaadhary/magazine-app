@@ -7,7 +7,7 @@ const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.25;
 const RENDER_SCALE = 1;
 const BATCH_SIZE = 3;
-const PDF_LOAD_TIMEOUT = 15000;
+const PDF_LOAD_TIMEOUT = 30000;
 
 function withTimeout(promise, ms) {
   return Promise.race([
