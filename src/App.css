@@ -348,3 +348,94 @@ body {
   gap: 12px;
   margin-top: 8px;
 }
+
+/* Mobile nav */
+.header-left { display: flex; align-items: center; }
+.header-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  /* Header */
+  .hamburger { display: block; }
+  .header {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    position: relative;
+  }
+  .header-left { flex: 1; min-width: 0; }
+  .header-brand { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-right {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    margin-top: 12px;
+  }
+  .header-right.open { display: flex; }
+  .header-right a, .header-right .btn-link {
+    font-size: 1rem;
+    padding: 4px 0;
+  }
+
+  /* Pages */
+  .home-page { padding: 0 12px; }
+  .magazine-title { font-size: 1.2rem; }
+  .magazine-desc { font-size: 0.9rem; margin-bottom: 16px; }
+
+  /* Flipbook */
+  .flipbook-controls {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .flipbook-controls button {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  /* Magazines grid */
+  .magazines-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .magazine-card-cover { height: 120px; }
+  .magazine-card-info { padding: 10px; }
+  .magazine-card-info h3 { font-size: 0.9rem; }
+
+  /* Login */
+  .login-page { margin: 20px 16px; }
+  .login-form input, .login-form button { font-size: 1rem; padding: 12px; }
+
+  /* Admin */
+  .admin-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .admin-table { min-width: 500px; }
+
+  /* Comment */
+  .comment-form { max-width: 100%; }
+  .comment-list { max-width: 100%; }
+
+  /* Container */
+  .container { padding: 16px 12px; }
+}

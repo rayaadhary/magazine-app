@@ -38,27 +38,29 @@ export default function Admin() {
         <h2>Kelola Majalah</h2>
         <Link to="/admin/new" className="btn-primary">+ Majalah Baru</Link>
       </div>
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Judul</th>
-            <th>Tanggal</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {magazines.map((m) => (
-            <tr key={m.id}>
-              <td>{m.title}</td>
-              <td>{new Date(m.published_at).toLocaleDateString("id-ID")}</td>
-              <td className="admin-actions">
-                <Link to={`/admin/${m.id}/edit`} className="btn-edit">Edit</Link>
-                <button onClick={() => handleDelete(m.id, m.title)} className="btn-delete">Hapus</button>
-              </td>
+      <div className="admin-table-wrap">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Judul</th>
+              <th>Tanggal</th>
+              <th>Aksi</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {magazines.map((m) => (
+              <tr key={m.id}>
+                <td>{m.title}</td>
+                <td>{new Date(m.published_at).toLocaleDateString("id-ID")}</td>
+                <td className="admin-actions">
+                  <Link to={`/admin/${m.id}/edit`} className="btn-edit">Edit</Link>
+                  <button onClick={() => handleDelete(m.id, m.title)} className="btn-delete">Hapus</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {magazines.length === 0 && <p className="page-empty">Belum ada majalah.</p>}
     </div>
   );
