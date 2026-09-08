@@ -29,8 +29,8 @@ function getFlipbookSize(firstPage, fullscreen) {
     return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH, isMobile: true };
   }
 
-  const maxW = Math.min(vw * 0.85, 1000);
-  const maxH = Math.min(vh * 0.65, 800);
+  const maxW = vw * 0.88;
+  const maxH = vh * 0.75;
   let bookW = maxW;
   let bookH = bookW / aspect;
   if (bookH > maxH) {
