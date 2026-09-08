@@ -11,7 +11,7 @@ async function renderThumb(pdfUrl) {
   try {
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
     const page = await pdf.getPage(1);
-    const vp = page.getViewport({ scale: 0.6 });
+    const vp = page.getViewport({ scale: 0.4 });
     const canvas = document.createElement("canvas");
     canvas.width = vp.width;
     canvas.height = vp.height;

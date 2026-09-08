@@ -7,6 +7,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLi
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.25;
+const RENDER_SCALE = 1;
+const BATCH_SIZE = 3;
 
 function getFlipbookSize(firstPage, fullscreen, isMobile) {
   const vw = window.innerWidth;
@@ -36,6 +38,19 @@ function getFlipbookSize(firstPage, fullscreen, isMobile) {
   return { pageWidth: Math.floor(pageW), pageHeight: Math.floor(pageH) };
 }
 
+async function renderPage(pdf, pageNum) {
+  const page = await pdf.getPage(pageNum);
+  const viewport = page.getViewport({ scale: RENDER_SCALE });
+  const canvas = document.createElement("canvas");
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+  const data = canvas.toDataURL("image/jpeg", 0.6);
+  canvas.width = 0;
+  canvas.height = 0;
+  return { width: viewport.width, height: viewport.height, data };
+}
+
 export default function FlipbookViewer({ pdfUrl }) {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,6 +60,7 @@ export default function FlipbookViewer({ pdfUrl }) {
   const [size, setSize] = useState({ pageWidth: 300, pageHeight: 400 });
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const flipRef = useRef(null);
+  const pdfRef = useRef(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
@@ -59,24 +75,33 @@ export default function FlipbookViewer({ pdfUrl }) {
 
     const loadPdf = async () => {
       const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
-      const rendered = [];
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
-        rendered.push({
-          width: viewport.width,
-          height: viewport.height,
-          data: canvas.toDataURL("image/jpeg", 0.8),
-        });
-      }
-      setPages(rendered);
+      pdfRef.current = pdf;
+      const total = pdf.numPages;
+      const all = new Array(total).fill(null);
+
+      // Render first batch immediately
+      const firstBatch = Math.min(BATCH_SIZE, total);
+      const firstPages = await Promise.all(
+        Array.from({ length: firstBatch }, (_, i) => renderPage(pdf, i + 1))
+      );
+      for (let i = 0; i < firstBatch; i++) all[i] = firstPages[i];
+      setPages([...all]);
       setLoading(false);
+
+      // Render remaining in batches of BATCH_SIZE
+      for (let start = firstBatch; start < total; start += BATCH_SIZE) {
+        if (pdfRef.current !== pdf) return;
+        const end = Math.min(start + BATCH_SIZE, total);
+        const batch = await Promise.all(
+          Array.from({ length: end - start }, (_, i) => renderPage(pdf, start + i + 1))
+        );
+        for (let i = 0; i < batch.length; i++) all[start + i] = batch[i];
+        setPages([...all]);
+      }
     };
     loadPdf().catch(() => setLoading(false));
+
+    return () => { pdfRef.current = null; };
   }, [pdfUrl]);
 
   useEffect(() => {
@@ -142,7 +167,11 @@ export default function FlipbookViewer({ pdfUrl }) {
     >
       {pages.map((p, i) => (
         <div key={i} className="fb-page">
-          <img src={p.data} alt={`Halaman ${i + 1}`} draggable={false} />
+          {p ? (
+            <img src={p.data} alt={`Halaman ${i + 1}`} draggable={false} />
+          ) : (
+            <div className="fb-page-placeholder" />
+          )}
         </div>
       ))}
     </HTMLFlipBook>
