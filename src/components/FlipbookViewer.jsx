@@ -7,16 +7,24 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLi
 function getFlipbookSize(firstPage, fullscreen) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  const aspect = firstPage.width / firstPage.height;
+
   if (fullscreen) {
+    const maxW = vw * 0.92;
     const maxH = vh - 80;
-    const bookH = Math.min(firstPage.height, maxH);
-    const bookW = (firstPage.width / firstPage.height) * bookH;
-    return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH };
+    let bookW = maxW;
+    let bookH = bookW / aspect;
+    if (bookH > maxH) {
+      bookH = maxH;
+      bookW = bookH * aspect;
+    }
+    return { halfWidth: Math.floor(bookW / 2), bookHeight: Math.floor(bookH) };
   }
+
   const isMobile = vw < 640;
   const maxH = isMobile ? Math.min(vw - 24, 420) : 600;
   const bookH = Math.min(firstPage.height, maxH);
-  const bookW = (firstPage.width / firstPage.height) * bookH;
+  const bookW = bookH * aspect;
   return { halfWidth: Math.floor(bookW / 2), bookHeight: bookH, isMobile };
 }
 
