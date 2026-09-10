@@ -1,4 +1,16 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { margin: 0; -webkit-tap-highlight-color: transparent; }
-#root { min-height: 100vh; }
 @import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100vh;
+}
