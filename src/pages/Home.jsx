@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { getLatestMagazine, getMagazines, magazinePdfUrl } from "../api";
 import FlipbookViewer from "../components/FlipbookViewer";
 import CommentSection from "../components/CommentSection";
-import MagazineCard from "../components/MagazineCard";
-import { HomeSkeleton } from "../components/Skeleton";
+import { HomeSkeleton, Skeleton } from "../components/Skeleton";
 import { pdfjs } from "react-pdf";
 
 async function renderThumb(pdfUrl) {
@@ -15,8 +14,7 @@ async function renderThumb(pdfUrl) {
     const canvas = document.createElement("canvas");
     canvas.width = vp.width;
     canvas.height = vp.height;
-    await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp })
-      .promise;
+    await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
     return canvas.toDataURL("image/jpeg", 0.6);
   } catch {
     return null;
@@ -40,10 +38,7 @@ export default function Home() {
         setLoading(false);
 
         Promise.all(
-          filtered.map(async (m) => [
-            m.id,
-            await renderThumb(magazinePdfUrl(m.id)),
-          ]),
+          filtered.map(async (m) => [m.id, await renderThumb(magazinePdfUrl(m.id))])
         ).then((entries) => {
           if (!cancelled) setThumbs(Object.fromEntries(entries));
         });
@@ -64,134 +59,93 @@ export default function Home() {
 
   if (!magazine) {
     return (
-      <div className="min-h-[65vh] flex flex-col items-center justify-center text-center px-6 bg-[#FBF7EE]">
-        <p className="text-5xl mb-4" aria-hidden="true">
-          📰
-        </p>
-        <h2 className="text-2xl font-black text-[#201D1A] tracking-tight">
-          Edisi pertama belum terbit
-        </h2>
-        <p className="text-sm text-[#8A8474] mt-2 max-w-sm">
-          Begitu redaksi menerbitkan majalah, edisi terbarunya akan langsung
-          tampil di halaman ini.
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-6">
+        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-4">
+          📖
+        </div>
+        <h2 className="text-xl font-semibold text-slate-800">Belum Ada Majalah</h2>
+        <p className="text-sm text-slate-500 mt-1">
+          Majalah edisi terbaru akan muncul di sini setelah dipublikasikan.
         </p>
       </div>
     );
   }
 
-  const tanggal = new Date(magazine.published_at).toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
   return (
-    <div className="min-h-screen bg-[#FBF7EE] pb-20">
-      {/* Masthead */}
-      <div className="bg-[#201D1A] text-[#FBF7EE] px-4 sm:px-8 py-4 flex items-center justify-between border-b-4 border-[#F2A63B]">
-        <span className="text-lg sm:text-xl font-black tracking-tight">
-          Majalah Sekolah
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
+      {/* Hero Section */}
+      <section className="text-center max-w-3xl mx-auto space-y-3">
+        <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-semibold uppercase tracking-wider">
+          Edisi Terbaru
         </span>
-        <span className="text-xs text-[#C9C2B0] hidden sm:block">
-          Terbitan digital untuk warga sekolah
-        </span>
-      </div>
-
-      {/* Hero: latest edition */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-8 pt-10 pb-6">
-        <div className="flex flex-wrap items-start gap-4">
-          <h1 className="flex-1 min-w-[200px] text-3xl sm:text-5xl font-black text-[#201D1A] leading-[1.05] tracking-tight">
-            {magazine.title}
-          </h1>
-          <div
-            className="shrink-0 bg-[#F2A63B] text-[#201D1A] text-xs font-bold px-4 py-2.5 self-start"
-            style={{
-              clipPath:
-                "polygon(0 0,100% 0,100% 40%,94% 50%,100% 60%,100% 100%,0 100%,0 60%,6% 50%,0 40%)",
-            }}
-          >
-            Terbit {tanggal}
-          </div>
-        </div>
-
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          {magazine.title}
+        </h1>
         {magazine.description && (
-          <p className="mt-5 max-w-2xl text-[#3A362E] text-base leading-relaxed border-l-4 border-[#D6456B] pl-4">
+          <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
             {magazine.description}
           </p>
         )}
-
-        <a
-          href="#flipbook"
-          className="inline-block mt-6 text-sm font-bold text-[#201D1A] border-b-2 border-[#201D1A] hover:border-[#D6456B] hover:text-[#D6456B] transition-colors"
-        >
-          Baca edisi ini ↓
-        </a>
-
-        <div className="mt-10 grid grid-cols-3 divide-x divide-[#E4DCC8] border-y border-[#E4DCC8] py-4 text-center">
-          <div>
-            <div className="font-black text-[#201D1A]">Digital</div>
-            <div className="text-xs text-[#8A8474]">Baca kapan saja</div>
-          </div>
-          <div>
-            <div className="font-black text-[#201D1A]">Flipbook</div>
-            <div className="text-xs text-[#8A8474]">Buka seperti buku</div>
-          </div>
-          <div>
-            <div className="font-black text-[#201D1A]">Komentar</div>
-            <div className="text-xs text-[#8A8474]">Tinggalkan kesan</div>
-          </div>
-        </div>
+        <time className="inline-block text-xs font-medium text-slate-400">
+          {new Date(magazine.published_at).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </time>
       </section>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-8 space-y-14">
-        {/* Flipbook viewer */}
-        <section id="flipbook" className="pt-4">
-          <div className="border-2 border-[#201D1A] p-2 sm:p-3 bg-white">
-            <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
-          </div>
-        </section>
+      {/* Main Flipbook */}
+      <section id="flipbook" className="bg-slate-900/5 p-2 sm:p-4 rounded-2xl shadow-inner">
+        <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+      </section>
 
-        {/* Comments */}
-        <section className="max-w-3xl space-y-4">
-          <div className="border-b-2 border-[#201D1A] pb-2">
-            <h3 className="text-xl font-black text-[#201D1A]">
-              Diskusi edisi ini
-            </h3>
-            <p className="text-xs text-[#8A8474] mt-1">
-              Tulis pesan, saran, atau kesanmu tentang edisi ini.
-            </p>
-          </div>
-          <CommentSection magazineId={magazine.id} />
-        </section>
+      {/* Comment Section */}
+      <div className="max-w-4xl mx-auto pt-4">
+        <CommentSection magazineId={magazine.id} />
+      </div>
 
-        {/* Archive */}
-        {others.length > 0 && (
-          <section className="space-y-6 border-t-2 border-[#201D1A] pt-8">
-            <div className="flex items-end justify-between">
-              <h2 className="text-2xl font-black text-[#201D1A] tracking-tight">
-                Arsip edisi lain
-              </h2>
+      {/* Majalah Lainnya */}
+      {others.length > 0 && (
+        <section className="pt-8 border-t border-slate-200/80 space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-slate-900">Majalah Lainnya</h2>
+            <Link
+              to="/magazines"
+              className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+            >
+              Lihat Semua &rarr;
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            {others.map((m) => (
               <Link
-                to="/magazines"
-                className="text-sm font-bold text-[#201D1A] border-b-2 border-[#201D1A] hover:text-[#D6456B] hover:border-[#D6456B] transition-colors"
+                to={`/magazines/${m.id}`}
+                key={m.id}
+                className="group flex flex-col space-y-2 focus:outline-none"
               >
-                Lihat semua
+                <div className="relative aspect-[3/4] w-full bg-slate-100 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-300 border border-slate-200/60">
+                  {thumbs[m.id] ? (
+                    <img
+                      src={thumbs[m.id]}
+                      alt={m.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-4">
+                      <Skeleton className="w-full h-full absolute inset-0" />
+                    </div>
+                  )}
+                </div>
+                <span className="text-sm font-medium text-slate-800 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                  {m.title}
+                </span>
               </Link>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-8">
-              {others.map((m, i) => (
-                <MagazineCard
-                  key={m.id}
-                  id={m.id}
-                  title={m.title}
-                  thumb={thumbs[m.id]}
-                  index={i}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-      </main>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
