@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { getLatestMagazine, getMagazines, magazinePdfUrl } from "../api";
 import FlipbookViewer from "../components/FlipbookViewer";
 import CommentSection from "../components/CommentSection";
-import { HomeSkeleton, Skeleton } from "../components/Skeleton";
+import MagazineCard from "../components/MagazineCard";
+import { HomeSkeleton } from "../components/Skeleton";
 import { pdfjs } from "react-pdf";
 
 async function renderThumb(pdfUrl) {
@@ -63,171 +64,129 @@ export default function Home() {
 
   if (!magazine) {
     return (
-      <div className="min-h-[65vh] flex flex-col items-center justify-center text-center p-6 bg-slate-50">
-        <div className="w-20 h-20 bg-slate-900/10 text-slate-800 rounded-2xl flex items-center justify-center text-3xl mb-4 shadow-sm border border-slate-200">
+      <div className="min-h-[65vh] flex flex-col items-center justify-center text-center px-6 bg-[#FBF7EE]">
+        <p className="text-5xl mb-4" aria-hidden="true">
           📰
-        </div>
-        <h2 className="text-2xl font-bold text-slate-900">
-          Belum Ada Edisi Majalah
+        </p>
+        <h2 className="text-2xl font-black text-[#201D1A] tracking-tight">
+          Edisi pertama belum terbit
         </h2>
-        <p className="text-sm text-slate-500 mt-2 max-w-sm">
-          Majalah digital sekolah edisi terbaru akan segera dipublikasikan di
-          sini.
+        <p className="text-sm text-[#8A8474] mt-2 max-w-sm">
+          Begitu redaksi menerbitkan majalah, edisi terbarunya akan langsung
+          tampil di halaman ini.
         </p>
       </div>
     );
   }
 
+  const tanggal = new Date(magazine.published_at).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-16 space-y-12">
-      {/* Hero Banner Section (Navy Palette) */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 text-white pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800 shadow-xl">
-        {/* Decorative Background Elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.1),transparent_50%)] pointer-events-none" />
-        <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-[#FBF7EE] pb-20">
+      {/* Masthead */}
+      <div className="bg-[#201D1A] text-[#FBF7EE] px-4 sm:px-8 py-4 flex items-center justify-between border-b-4 border-[#F2A63B]">
+        <span className="text-lg sm:text-xl font-black tracking-tight">
+          Majalah Sekolah
+        </span>
+        <span className="text-xs text-[#C9C2B0] hidden sm:block">
+          Terbitan digital untuk warga sekolah
+        </span>
+      </div>
 
-        <div className="max-w-5xl mx-auto relative z-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-sky-300 text-xs font-semibold tracking-wider uppercase backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
-            Edisi Terbaru Sekolah
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+      {/* Hero: latest edition */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-8 pt-10 pb-6">
+        <div className="flex flex-wrap items-start gap-4">
+          <h1 className="flex-1 min-w-[200px] text-3xl sm:text-5xl font-black text-[#201D1A] leading-[1.05] tracking-tight">
             {magazine.title}
           </h1>
-
-          {magazine.description && (
-            <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
-              {magazine.description}
-            </p>
-          )}
-
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-slate-400 pt-2">
-            <span className="flex items-center gap-1.5 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60">
-              📅 Rilis:{" "}
-              {new Date(magazine.published_at).toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </span>
-            <a
-              href="#flipbook"
-              className="px-4 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold rounded-lg transition-all shadow-md shadow-sky-500/20"
-            >
-              Baca Edisi Ini ↓
-            </a>
+          <div
+            className="shrink-0 bg-[#F2A63B] text-[#201D1A] text-xs font-bold px-4 py-2.5 self-start"
+            style={{
+              clipPath:
+                "polygon(0 0,100% 0,100% 40%,94% 50%,100% 60%,100% 100%,0 100%,0 60%,6% 50%,0 40%)",
+            }}
+          >
+            Terbit {tanggal}
           </div>
+        </div>
 
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto pt-6 text-slate-300 border-t border-slate-800/80">
-            <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 backdrop-blur-xs">
-              <div className="text-lg font-bold text-white">Edisi Digital</div>
-              <div className="text-xs text-slate-400">Akses Kapan Saja</div>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 backdrop-blur-xs">
-              <div className="text-lg font-bold text-white">Interaktif</div>
-              <div className="text-xs text-slate-400">Mode Flipbook PDF</div>
-            </div>
-            <div className="col-span-2 sm:col-span-1 p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 backdrop-blur-xs">
-              <div className="text-lg font-bold text-white">Ruang Diskusi</div>
-              <div className="text-xs text-slate-400">Komentar Reader</div>
-            </div>
+        {magazine.description && (
+          <p className="mt-5 max-w-2xl text-[#3A362E] text-base leading-relaxed border-l-4 border-[#D6456B] pl-4">
+            {magazine.description}
+          </p>
+        )}
+
+        <a
+          href="#flipbook"
+          className="inline-block mt-6 text-sm font-bold text-[#201D1A] border-b-2 border-[#201D1A] hover:border-[#D6456B] hover:text-[#D6456B] transition-colors"
+        >
+          Baca edisi ini ↓
+        </a>
+
+        <div className="mt-10 grid grid-cols-3 divide-x divide-[#E4DCC8] border-y border-[#E4DCC8] py-4 text-center">
+          <div>
+            <div className="font-black text-[#201D1A]">Digital</div>
+            <div className="text-xs text-[#8A8474]">Baca kapan saja</div>
+          </div>
+          <div>
+            <div className="font-black text-[#201D1A]">Flipbook</div>
+            <div className="text-xs text-[#8A8474]">Buka seperti buku</div>
+          </div>
+          <div>
+            <div className="font-black text-[#201D1A]">Komentar</div>
+            <div className="text-xs text-[#8A8474]">Tinggalkan kesan</div>
           </div>
         </div>
       </section>
 
-      {/* Main Content Area */}
-      <main className="max-w-6xl mx-auto px-4 space-y-12">
-        {/* Main Flipbook Viewer Card */}
-        <section
-          id="flipbook"
-          className="bg-white p-3 sm:p-6 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 transition-all"
-        >
-          <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-slate-900" />
-              <h2 className="text-lg font-bold text-slate-900">
-                Pembaca Majalah Digital
-              </h2>
-            </div>
-            <span className="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">
-              Mode HD
-            </span>
-          </div>
-
-          <div className="bg-slate-950 rounded-xl overflow-hidden shadow-inner p-1 sm:p-3">
+      <main className="max-w-5xl mx-auto px-4 sm:px-8 space-y-14">
+        {/* Flipbook viewer */}
+        <section id="flipbook" className="pt-4">
+          <div className="border-2 border-[#201D1A] p-2 sm:p-3 bg-white">
             <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
           </div>
         </section>
 
-        {/* Comment Section Container */}
-        <section className="bg-white p-6 sm:p-8 rounded-2xl shadow-md shadow-slate-200/50 border border-slate-200/80 max-w-4xl mx-auto space-y-4">
-          <div className="border-b border-slate-100 pb-3">
-            <h3 className="text-xl font-bold text-slate-900">
-              Diskusi & Resensi Edisi Ini
+        {/* Comments */}
+        <section className="max-w-3xl space-y-4">
+          <div className="border-b-2 border-[#201D1A] pb-2">
+            <h3 className="text-xl font-black text-[#201D1A]">
+              Diskusi edisi ini
             </h3>
-            <p className="text-xs text-slate-500">
-              Tinggalkan pesan, saran, atau kesan Anda mengenai majalah ini.
+            <p className="text-xs text-[#8A8474] mt-1">
+              Tulis pesan, saran, atau kesanmu tentang edisi ini.
             </p>
           </div>
           <CommentSection magazineId={magazine.id} />
         </section>
 
-        {/* Majalah Lainnya Section */}
+        {/* Archive */}
         {others.length > 0 && (
-          <section className="pt-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-              <div>
-                <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                  Arsip & Edisi Lainnya
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Jelajahi karya dan terbitan sekolah sebelumnya
-                </p>
-              </div>
+          <section className="space-y-6 border-t-2 border-[#201D1A] pt-8">
+            <div className="flex items-end justify-between">
+              <h2 className="text-2xl font-black text-[#201D1A] tracking-tight">
+                Arsip edisi lain
+              </h2>
               <Link
                 to="/magazines"
-                className="text-sm font-bold text-slate-900 hover:text-sky-600 flex items-center gap-1 transition-colors group"
+                className="text-sm font-bold text-[#201D1A] border-b-2 border-[#201D1A] hover:text-[#D6456B] hover:border-[#D6456B] transition-colors"
               >
-                Lihat Semua{" "}
-                <span className="group-hover:translate-x-1 transition-transform">
-                  &rarr;
-                </span>
+                Lihat semua
               </Link>
             </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-              {others.map((m) => (
-                <Link
-                  to={`/magazines/${m.id}`}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-8">
+              {others.map((m, i) => (
+                <MagazineCard
                   key={m.id}
-                  className="group flex flex-col space-y-3 bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-slate-300 transition-all duration-300 focus:outline-none"
-                >
-                  <div className="relative aspect-[3/4] w-full bg-slate-900 rounded-xl overflow-hidden border border-slate-200/60 shadow-inner">
-                    {thumbs[m.id] ? (
-                      <img
-                        src={thumbs[m.id]}
-                        alt={m.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                        <Skeleton className="w-full h-full absolute inset-0" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-
-                  <div className="space-y-1">
-                    <span className="text-xs font-semibold text-sky-600 uppercase tracking-wider block">
-                      Arsip Majalah
-                    </span>
-                    <h4 className="text-sm font-bold text-slate-900 line-clamp-2 group-hover:text-sky-700 transition-colors">
-                      {m.title}
-                    </h4>
-                  </div>
-                </Link>
+                  id={m.id}
+                  title={m.title}
+                  thumb={thumbs[m.id]}
+                  index={i}
+                />
               ))}
             </div>
           </section>
