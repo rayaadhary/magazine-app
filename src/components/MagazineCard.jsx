@@ -1,35 +1,33 @@
 import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 
-// Alternating "pin" colors so the archive grid reads like a corkboard,
-// not a row of identical SaaS cards.
-const PIN_COLORS = ["#F2A63B", "#D6456B", "#1F7A72"];
-
-export default function MagazineCard({ id, title, thumb, index = 0 }) {
-  const pin = PIN_COLORS[index % PIN_COLORS.length];
-
+export default function MagazineCard({ id, title, thumb }) {
   return (
     <Link
       to={`/magazines/${id}`}
-      className="group flex flex-col gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A72] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FBF7EE]"
+      className="group flex flex-col space-y-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a7bc8] focus-visible:ring-offset-2"
     >
-      <div className="relative aspect-[3/4] w-full bg-[#201D1A] border-2 border-[#201D1A] overflow-hidden transition-transform duration-200 ease-out group-hover:-rotate-1 group-hover:-translate-y-0.5">
-        <span
-          className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-4 rotate-3 z-10"
-          style={{ backgroundColor: pin }}
-          aria-hidden="true"
-        />
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg"
+        style={{
+          background: "#1a2a42",
+          boxShadow: "0 2px 8px rgba(15,36,71,0.1)",
+        }}>
         {thumb ? (
           <img
             src={thumb}
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <Skeleton className="w-full h-full absolute inset-0" />
         )}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{ background: "linear-gradient(to top, rgba(15,36,71,0.5) 0%, transparent 50%)" }} />
       </div>
-      <span className="text-sm font-semibold text-[#201D1A] leading-snug line-clamp-2 group-hover:text-[#D6456B] transition-colors">
+      <span className="text-sm font-semibold leading-snug line-clamp-2 transition-colors"
+        style={{ color: "#1a2a42" }}
+        onMouseEnter={(e) => (e.target.style.color = "#e8a838")}
+        onMouseLeave={(e) => (e.target.style.color = "#1a2a42")}>
         {title}
       </span>
     </Link>

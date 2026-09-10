@@ -53,15 +53,15 @@ export default function CommentSection({ magazineId }) {
           rows={3}
         />
         <button type="submit" disabled={sending}>
-          {sending ? "Mengirim..." : "Kirim"}
+          {sending ? "Mengirim..." : "Kirim Komentar"}
         </button>
       </form>
       <div className="comment-list">
-        {comments.length === 0 && <p className="comment-empty">Belum ada komentar.</p>}
+        {comments.length === 0 && <p className="comment-empty">Belum ada komentar. Jadilah yang pertama!</p>}
         {comments.map((c) => (
           <div key={c.id} className="comment-item">
             <div className="comment-header">
-              <strong>{c.author_name}</strong>
+              <strong style={{ color: "#1a2a42", fontSize: "0.9rem" }}>{c.author_name}</strong>
               <span className="comment-date">{new Date(c.created_at).toLocaleDateString("id-ID")}</span>
               {user && (user.role === "pembina" || user.role === "waka") && (
                 <button onClick={() => handleDelete(c.id)} className="btn-delete-sm">Hapus</button>

@@ -19,21 +19,22 @@ export default function Header() {
     <header className="header">
       <div className="header-left">
         <Link to="/" className="header-brand" onClick={handleNav}>
-          Media internal SMP MUHAMMADIYAH 6 SURABAYA.
+          <span className="header-brand-icon">MU6</span>
+          <span>SMP Muhammadiyah 6 Surabaya</span>
         </Link>
       </div>
       <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
         {menuOpen ? "\u2715" : "\u2630"}
       </button>
       <nav className={`header-right${menuOpen ? " open" : ""}`}>
-        <Link to="/magazines" onClick={handleNav}>Majalah Sebelumnya</Link>
+        <Link to="/magazines" onClick={handleNav}>Arsip Majalah</Link>
         {user ? (
           <>
-            <Link to="/admin" onClick={handleNav}>Admin</Link>
-            <button onClick={handleLogout} className="btn-link">Logout</button>
+            <Link to="/admin" onClick={handleNav}>Kelola</Link>
+            <button onClick={handleLogout} className="btn-link">Keluar</button>
           </>
         ) : (
-          <Link to="/login" onClick={handleNav}>Login</Link>
+          <Link to="/login" onClick={handleNav}>Masuk</Link>
         )}
       </nav>
     </header>

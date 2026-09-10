@@ -35,7 +35,7 @@ export default function Admin() {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h2>Kelola Majalah</h2>
+        <h2 className="text-xl">Kelola Majalah</h2>
         <Link to="/admin/new" className="btn-primary">+ Majalah Baru</Link>
       </div>
       <div className="admin-table-wrap">
@@ -50,8 +50,10 @@ export default function Admin() {
           <tbody>
             {magazines.map((m) => (
               <tr key={m.id}>
-                <td>{m.title}</td>
-                <td>{new Date(m.published_at).toLocaleDateString("id-ID")}</td>
+                <td className="font-medium">{m.title}</td>
+                <td style={{ color: "#6b7a90" }}>
+                  {new Date(m.published_at).toLocaleDateString("id-ID")}
+                </td>
                 <td className="admin-actions">
                   <Link to={`/admin/${m.id}/edit`} className="btn-edit">Edit</Link>
                   <button onClick={() => handleDelete(m.id, m.title)} className="btn-delete">Hapus</button>

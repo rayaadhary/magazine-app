@@ -25,27 +25,29 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="login-form">
-        {error && <div className="error-msg">{error}</div>}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Kata Sandi"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Masuk..." : "Masuk"}
-        </button>
-      </form>
+      <div className="login-card">
+        <h2>Masuk</h2>
+        <form onSubmit={handleSubmit} className="login-form">
+          {error && <div className="error-msg">{error}</div>}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Kata Sandi"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? "Masuk..." : "Masuk"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

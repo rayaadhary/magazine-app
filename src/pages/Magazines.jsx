@@ -57,13 +57,13 @@ export default function Magazines() {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-        <div className="border-b border-slate-200/80 pb-4">
+        <div className="pb-4" style={{ borderBottom: "1px solid #edf0f5" }}>
           <Skeleton className="h-8 w-48 rounded-lg" />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="space-y-2">
-              <Skeleton className="w-full aspect-[3/4] rounded-xl" />
+            <div key={i} className="space-y-3">
+              <Skeleton className="w-full aspect-[3/4] rounded-lg" />
               <Skeleton className="h-4 w-3/4 rounded" />
             </div>
           ))}
@@ -75,22 +75,26 @@ export default function Magazines() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}
-      <header className="border-b border-slate-200/80 pb-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Majalah Sebelumnya
+      <header className="pb-4" style={{ borderBottom: "1px solid #edf0f5" }}>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: "#1a2a42" }}>
+          Arsip Majalah
         </h1>
+        <p className="text-sm mt-1" style={{ color: "#6b7a90" }}>
+          Semua edisi majalah yang pernah diterbitkan.
+        </p>
       </header>
 
       {/* Grid Content */}
       {magazines.length === 0 ? (
         <div className="min-h-[40vh] flex flex-col items-center justify-center text-center p-6">
-          <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-4">
-            📚
+          <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl mb-5"
+            style={{ background: "linear-gradient(135deg, #e8a838 0%, #f0c060 100%)" }}>
+            <span role="img" aria-hidden="true">📚</span>
           </div>
-          <h2 className="text-lg font-semibold text-slate-800">
+          <h2 className="text-lg font-bold" style={{ color: "#1a2a42" }}>
             Belum Ada Majalah
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm mt-2" style={{ color: "#6b7a90" }}>
             Arsip majalah akan ditampilkan di sini.
           </p>
         </div>
@@ -100,22 +104,31 @@ export default function Magazines() {
             <Link
               to={`/magazines/${m.id}`}
               key={m.id}
-              className="group flex flex-col space-y-2 focus:outline-none"
+              className="group flex flex-col space-y-3 focus:outline-none"
             >
-              <div className="relative aspect-[3/4] w-full bg-slate-100 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-300 border border-slate-200/60">
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg"
+                style={{
+                  background: "#1a2a42",
+                  boxShadow: "0 2px 8px rgba(15,36,71,0.1)",
+                }}>
                 {thumbs[m.id] ? (
                   <img
                     src={thumbs[m.id]}
                     alt={m.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                    <Skeleton className="w-full h-full absolute inset-0" />
+                  <div className="w-full h-full">
+                    <Skeleton className="w-full h-full" />
                   </div>
                 )}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: "linear-gradient(to top, rgba(15,36,71,0.5) 0%, transparent 50%)" }} />
               </div>
-              <span className="text-sm font-medium text-slate-800 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+              <span className="text-sm font-semibold line-clamp-2 transition-colors"
+                style={{ color: "#1a2a42" }}
+                onMouseEnter={(e) => (e.target.style.color = "#e8a838")}
+                onMouseLeave={(e) => (e.target.style.color = "#1a2a42")}>
                 {m.title}
               </span>
             </Link>

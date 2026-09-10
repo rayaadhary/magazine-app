@@ -36,7 +36,7 @@ export default function AdminEdit() {
 
   return (
     <div className="admin-form-page">
-      <h2>Edit Majalah</h2>
+      <h2 className="text-xl">Edit Majalah</h2>
       <form onSubmit={handleSubmit} className="admin-form">
         {error && <div className="error-msg">{error}</div>}
         <label>Judul</label>

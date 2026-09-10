@@ -26,7 +26,7 @@ export default function AdminNew() {
 
   return (
     <div className="admin-form-page">
-      <h2>Majalah Baru</h2>
+      <h2 className="text-xl">Majalah Baru</h2>
       <form onSubmit={handleSubmit} className="admin-form">
         {error && <div className="error-msg">{error}</div>}
         <label>Judul</label>

@@ -60,44 +60,59 @@ export default function Home() {
   if (!magazine) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-6">
-        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-4">
-          📖
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl mb-5"
+          style={{ background: "linear-gradient(135deg, #e8a838 0%, #f0c060 100%)" }}>
+          <span role="img" aria-hidden="true">📖</span>
         </div>
-        <h2 className="text-xl font-semibold text-slate-800">Belum Ada Majalah</h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <h2 className="text-xl font-bold text-[#1a2a42]">Belum Ada Majalah</h2>
+        <p className="text-sm mt-2 max-w-xs" style={{ color: "#6b7a90" }}>
           Majalah edisi terbaru akan muncul di sini setelah dipublikasikan.
         </p>
       </div>
     );
   }
 
+  const formatDate = (d) =>
+    new Date(d).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
       {/* Hero Section */}
-      <section className="text-center max-w-3xl mx-auto space-y-3">
-        <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-semibold uppercase tracking-wider">
-          Edisi Terbaru
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          {magazine.title}
-        </h1>
-        {magazine.description && (
-          <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
-            {magazine.description}
-          </p>
-        )}
-        <time className="inline-block text-xs font-medium text-slate-400">
-          {new Date(magazine.published_at).toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </time>
+      <section className="relative overflow-hidden rounded-2xl p-8 sm:p-12 text-center"
+        style={{
+          background: "linear-gradient(135deg, #0f2447 0%, #1a3666 50%, #2c5294 100%)",
+        }}>
+        <div className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
+            style={{ background: "rgba(232, 168, 56, 0.15)", color: "#f0c060" }}>
+            Edisi Terbaru
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            {magazine.title}
+          </h1>
+          {magazine.description && (
+            <p className="text-base sm:text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
+              {magazine.description}
+            </p>
+          )}
+          <time className="inline-block text-xs font-semibold" style={{ color: "rgba(255,255,255,0.45)" }}>
+            {formatDate(magazine.published_at)}
+          </time>
+        </div>
       </section>
 
       {/* Main Flipbook */}
-      <section id="flipbook" className="bg-slate-900/5 p-2 sm:p-4 rounded-2xl shadow-inner">
-        <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+      <section id="flipbook" className="rounded-2xl overflow-hidden"
+        style={{ background: "rgba(15, 36, 71, 0.03)", border: "1px solid #edf0f5" }}>
+        <div className="p-2 sm:p-4">
+          <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+        </div>
       </section>
 
       {/* Comment Section */}
@@ -107,14 +122,17 @@ export default function Home() {
 
       {/* Majalah Lainnya */}
       {others.length > 0 && (
-        <section className="pt-8 border-t border-slate-200/80 space-y-6">
+        <section className="pt-8 space-y-6" style={{ borderTop: "1px solid #edf0f5" }}>
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-slate-900">Majalah Lainnya</h2>
+            <h2 className="text-2xl font-bold text-[#1a2a42]">Majalah Lainnya</h2>
             <Link
               to="/magazines"
-              className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+              className="text-sm font-bold transition-colors"
+              style={{ color: "#4a7bc8" }}
+              onMouseEnter={(e) => (e.target.style.color = "#2c5294")}
+              onMouseLeave={(e) => (e.target.style.color = "#4a7bc8")}
             >
-              Lihat Semua &rarr;
+              Lihat Semua →
             </Link>
           </div>
 
@@ -123,22 +141,31 @@ export default function Home() {
               <Link
                 to={`/magazines/${m.id}`}
                 key={m.id}
-                className="group flex flex-col space-y-2 focus:outline-none"
+                className="group flex flex-col space-y-3 focus:outline-none"
               >
-                <div className="relative aspect-[3/4] w-full bg-slate-100 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-300 border border-slate-200/60">
+                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg"
+                  style={{
+                    background: "#1a2a42",
+                    boxShadow: "0 2px 8px rgba(15,36,71,0.1)",
+                  }}>
                   {thumbs[m.id] ? (
                     <img
                       src={thumbs[m.id]}
                       alt={m.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                      <Skeleton className="w-full h-full absolute inset-0" />
+                    <div className="w-full h-full">
+                      <Skeleton className="w-full h-full" />
                     </div>
                   )}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: "linear-gradient(to top, rgba(15,36,71,0.5) 0%, transparent 50%)" }} />
                 </div>
-                <span className="text-sm font-medium text-slate-800 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                <span className="text-sm font-semibold line-clamp-2 transition-colors"
+                  style={{ color: "#1a2a42" }}
+                  onMouseEnter={(e) => (e.target.style.color = "#e8a838")}
+                  onMouseLeave={(e) => (e.target.style.color = "#1a2a42")}>
                   {m.title}
                 </span>
               </Link>
