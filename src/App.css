@@ -664,6 +664,7 @@
   .fb-slider { width: 60px; }
   .fb-page-num { font-size: 0.75rem; min-width: 50px; }
   .fb-btn { min-width: 30px; height: 30px; font-size: 0.9rem; }
+  .fb-zoom-group { display: none; }
 
   /* Login */
   .login-page { margin: 24px auto; }
