@@ -90,18 +90,18 @@ export default function Home() {
 
         <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center justify-center space-y-4">
           <div className="flex items-center justify-center gap-4 sm:gap-8 w-full">
-            <span className="px-3.5 py-1 rounded-full text-[14px] font-extrabold tracking-widest text-white whitespace-nowrap shrink-0">
+            <span className="hidden sm:inline px-3.5 py-1 rounded-full text-[14px] font-extrabold tracking-widest text-white whitespace-nowrap shrink-0">
               Majalah Digital SMP Musix
             </span>
 
             <img
               src="/logo-sittah.png"
               alt="Sittah Magazine"
-              className="h-20 sm:h-28 w-auto object-contain drop-shadow-md shrink-0"
+              className="h-30 sm:h-28 w-auto object-contain drop-shadow-md shrink-0"
               onError={(e) => { e.target.style.display = "none"; }}
             />
 
-            <span className="px-3.5 py-1 rounded-full text-[14px] font-extrabold tracking-widest text-white whitespace-nowrap shrink-0">
+            <span className="hidden sm:inline px-3.5 py-1 rounded-full text-[14px] font-extrabold tracking-widest text-white whitespace-nowrap shrink-0">
               Majalah Digital SMP Musix
             </span>
           </div>
