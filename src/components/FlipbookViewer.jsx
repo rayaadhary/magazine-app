@@ -115,7 +115,7 @@ export default function FlipbookViewer({ pdfUrl }) {
         setPages([...all]);
       }
     };
-    loadPdf.catch((e) => {
+    loadPdf().catch((e) => {
       setError(e.message === "timeout" ? "Gagal memuat PDF. Periksa koneksi internet." : "Gagal memuat majalah.");
       setLoading(false);
     });
