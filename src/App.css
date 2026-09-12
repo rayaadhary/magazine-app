@@ -53,7 +53,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 32px;
-  height: 64px;
+  height: 72px;
   background: linear-gradient(135deg, #0f2447 0%, #1a3666 60%, #2c5294 100%);
   color: #fff;
   position: sticky;
@@ -73,7 +73,7 @@ body {
   gap: 10px;
 }
 .header-logo {
-  height: 44px;
+  height: 56px;
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
@@ -630,7 +630,7 @@ body {
   }
   .header-left { flex: 1; min-width: 0; }
   .header-brand { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .header-logo { height: 36px; }
+  .header-logo { height: 48px; }
   .hamburger { display: block; }
   .header-right {
     display: none;
