@@ -661,10 +661,14 @@
     padding: 8px 12px;
     gap: 6px;
   }
-  .fb-slider { width: 60px; }
-  .fb-page-num { font-size: 0.75rem; min-width: 50px; }
-  .fb-btn { min-width: 30px; height: 30px; font-size: 0.9rem; }
-  .fb-zoom-group { display: none; }
+  .fb-slider { display: none; }
+  .fb-page-num { font-size: 0.75rem; min-width: auto; }
+  .fb-btn { min-width: 28px; height: 28px; font-size: 0.85rem; padding: 0 4px; }
+  .fb-toolbar { gap: 4px; padding: 6px 10px; }
+  .fb-toolbar-left { gap: 4px; }
+  .fb-toolbar-right { gap: 4px; }
+  .fb-zoom-group { gap: 1px; }
+  .fb-zoom-group .fb-btn { min-width: 26px; height: 26px; font-size: 0.8rem; }
 
   /* Login */
   .login-page { margin: 24px auto; }
