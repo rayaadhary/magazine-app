@@ -29,6 +29,9 @@ export default function Header() {
             }} 
           />
           <span style={{ display: 'none', fontWeight: 800, fontSize: '1.1rem' }}>Sittah Magazine</span>
+          <span className="text-[10px] sm:text-xs font-medium leading-tight ml-1 whitespace-nowrap" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Humas SMP Muhammadiyah 6 Surabaya
+          </span>
         </Link>
       </div>
       <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
