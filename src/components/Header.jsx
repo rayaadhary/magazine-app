@@ -19,7 +19,7 @@ export default function Header() {
     <header className="header">
       <div className="header-left">
         <Link to="/" className="header-brand" onClick={handleNav}>
-          <img src="/logo-sittah.png" alt="Sittah Magazine" className="header-logo" />
+          <img src="/logo-sittah-2.png" alt="Sittah Magazine" className="header-logo" />
         </Link>
       </div>
       <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
