@@ -90,7 +90,7 @@ export default function Home() {
         />
         <div className="relative z-10 max-w-2xl mx-auto space-y-4">
           <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
-            style={{ background: "rgba(232, 168, 56, 0.15)", color: "#f0c060" }}>
+            style={{ background: "rgba(240, 184, 40, 0.15)", color: "#f0b828" }}>
             Edisi Terbaru
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">

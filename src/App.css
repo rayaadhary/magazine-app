@@ -4,9 +4,11 @@
   --primary-light: #2c5294;
   --primary-accent: #4a7bc8;
   --primary-glow: #5b8fd6;
-  --accent: #e8a838;
-  --accent-light: #f0c060;
-  --accent-hover: #d4942a;
+  --accent: #f0b828;
+  --accent-light: #f5cc50;
+  --accent-hover: #d9a420;
+  --brown: #3d2b1f;
+  --brown-light: #5a4235;
   --bg: #f5f3ee;
   --bg-warm: #faf8f4;
   --card-bg: #ffffff;
@@ -52,7 +54,7 @@ body {
   align-items: center;
   padding: 0 32px;
   height: 64px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 60%, var(--primary-light) 100%);
+  background: linear-gradient(135deg, #0f2447 0%, #1a3666 60%, #2c5294 100%);
   color: #fff;
   position: sticky;
   top: 0;
@@ -70,18 +72,11 @@ body {
   align-items: center;
   gap: 10px;
 }
-.header-brand-icon {
-  width: 32px;
-  height: 32px;
-  background: var(--accent);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--primary);
-  flex-shrink: 0;
+.header-logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 .header-right {
   display: flex;
@@ -635,7 +630,7 @@ body {
   }
   .header-left { flex: 1; min-width: 0; }
   .header-brand { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .header-brand-icon { width: 28px; height: 28px; font-size: 0.75rem; }
+  .header-logo { height: 36px; }
   .hamburger { display: block; }
   .header-right {
     display: none;
