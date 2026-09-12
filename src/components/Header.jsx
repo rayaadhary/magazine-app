@@ -20,7 +20,7 @@ export default function Header() {
       <div className="header-left">
         <Link to="/" className="header-brand flex items-center py-1" onClick={handleNav}>
           <img 
-            src="/logo-sittah-2.png" 
+            src="/logo-sittah.png" 
             alt="Sittah Magazine" 
             className="h-12 sm:h-14 w-auto object-contain" // Ubah h-12 ke h-16 kalau masih kurang besar
             onError={(e) => { 
