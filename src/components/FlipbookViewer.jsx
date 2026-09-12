@@ -57,6 +57,12 @@ async function renderPage(pdf, pageNum) {
   return { width: viewport.width, height: viewport.height, data };
 }
 
+function getDistance(t1, t2) {
+  const dx = t1.clientX - t2.clientX;
+  const dy = t1.clientY - t2.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
 export default function FlipbookViewer({ pdfUrl }) {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +74,9 @@ export default function FlipbookViewer({ pdfUrl }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const flipRef = useRef(null);
   const pdfRef = useRef(null);
+  const containerRef = useRef(null);
+  const pinchStartDist = useRef(null);
+  const pinchStartZoom = useRef(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
@@ -106,7 +115,7 @@ export default function FlipbookViewer({ pdfUrl }) {
         setPages([...all]);
       }
     };
-    loadPdf().catch((e) => {
+    loadPdf.catch((e) => {
       setError(e.message === "timeout" ? "Gagal memuat PDF. Periksa koneksi internet." : "Gagal memuat majalah.");
       setLoading(false);
     });
@@ -152,6 +161,60 @@ export default function FlipbookViewer({ pdfUrl }) {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [fullscreen]);
+
+  // Scroll-to-zoom on desktop
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || isMobile) return;
+
+    const handleWheel = (e) => {
+      if (!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+      setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z + delta)));
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, [isMobile]);
+
+  // Pinch-to-zoom on mobile
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || !isMobile) return;
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        pinchStartDist.current = getDistance(e.touches[0], e.touches[1]);
+        pinchStartZoom.current = zoom;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 2 && pinchStartDist.current !== null) {
+        e.preventDefault();
+        const dist = getDistance(e.touches[0], e.touches[1]);
+        const ratio = dist / pinchStartDist.current;
+        const newZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, pinchStartZoom.current * ratio));
+        setZoom(newZoom);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      pinchStartDist.current = null;
+      pinchStartZoom.current = null;
+    };
+
+    el.addEventListener("touchstart", handleTouchStart, { passive: false });
+    el.addEventListener("touchmove", handleTouchMove, { passive: false });
+    el.addEventListener("touchend", handleTouchEnd);
+    return () => {
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchmove", handleTouchMove);
+      el.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isMobile, zoom]);
 
   const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP));
   const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP));
@@ -249,7 +312,7 @@ export default function FlipbookViewer({ pdfUrl }) {
 
   if (isMobile) {
     return (
-      <div className="fb-container fb-container-mobile">
+      <div className="fb-container fb-container-mobile" ref={containerRef}>
         {flipbook}
         {toolbar}
       </div>
@@ -257,7 +320,7 @@ export default function FlipbookViewer({ pdfUrl }) {
   }
 
   return (
-    <div className="fb-container">
+    <div className="fb-container" ref={containerRef}>
       <div className="fb-zoom-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: "top center" }}>
         {flipbook}
       </div>

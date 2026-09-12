@@ -659,7 +659,6 @@ body {
     padding: 8px 12px;
     gap: 6px;
   }
-  .fb-toolbar-right .fb-zoom-group { display: none; }
   .fb-slider { width: 60px; }
   .fb-page-num { font-size: 0.75rem; min-width: 50px; }
   .fb-btn { min-width: 30px; height: 30px; font-size: 0.9rem; }
