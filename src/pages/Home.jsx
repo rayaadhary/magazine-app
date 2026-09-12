@@ -93,9 +93,18 @@ export default function Home() {
             style={{ background: "rgba(240, 184, 40, 0.15)", color: "#f0b828" }}>
             Edisi Terbaru
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-            {magazine.title}
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight">
+             sittah magazine
           </h1>
+          <img 
+            src="/logo-sittah-2.png" 
+            alt="Sittah Magazine" 
+            className="h-12 sm:h-14 w-auto object-contain" // Ubah h-12 ke h-16 kalau masih kurang besar
+            onError={(e) => { 
+              e.target.style.display = 'none'; 
+              e.target.nextSibling.style.display = 'block'; 
+            }} 
+          />
           {magazine.description && (
             <p className="text-base sm:text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
               {magazine.description}
