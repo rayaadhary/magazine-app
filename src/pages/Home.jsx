@@ -122,7 +122,7 @@ export default function Home() {
           <img
             src="/logo-sittah-2.png"
             alt="Sittah Magazine"
-            className="h-16 sm:h-20 w-auto max-w-[220px] sm:max-w-[300px] object-contain mx-auto block"
+            className="h-28 sm:h-36 w-auto max-w-[320px] sm:max-w-[420px] object-contain mx-auto block"
             onError={(e) => { e.target.style.display = "none"; }}
           />
 
