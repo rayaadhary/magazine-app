@@ -93,7 +93,7 @@ export default function Home() {
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
       {/* Hero Section */}
       <section
-        className="relative overflow-hidden rounded-2xl p-8 sm:p-12 text-center"
+        className="relative overflow-hidden rounded-2xl px-6 py-10 sm:px-12 sm:py-14 text-center"
         style={{
           background:
             "linear-gradient(135deg, #0f2447 0%, #1a3666 50%, #2c5294 100%)",
@@ -107,7 +107,7 @@ export default function Home() {
             backgroundSize: "24px 24px",
           }}
         />
-        <div className="relative z-10 max-w-2xl mx-auto space-y-4 flex flex-col items-center">
+        <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-4">
           <span
             className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
             style={{ background: "rgba(240, 184, 40, 0.15)", color: "#f0b828" }}
@@ -115,25 +115,20 @@ export default function Home() {
             Edisi Terbaru
           </span>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight leading-tight">
             {magazine.title}
           </h1>
 
-          {/* Logo diposisikan ke tengah (mx-auto block) & override CSS height dengan !h-auto */}
           <img
             src="/logo-sittah-2.png"
             alt="Sittah Magazine"
-            className="!h-20 sm:!h-24 w-auto max-w-[280px] sm:max-w-[360px] object-contain mx-auto my-2 block"
-            onError={(e) => {
-              e.target.style.display = "none";
-              if (e.target.nextSibling)
-                e.target.nextSibling.style.display = "block";
-            }}
+            className="h-16 sm:h-20 w-auto max-w-[220px] sm:max-w-[300px] object-contain mx-auto block"
+            onError={(e) => { e.target.style.display = "none"; }}
           />
 
           {magazine.description && (
             <p
-              className="text-base sm:text-lg leading-relaxed"
+              className="text-sm sm:text-base leading-relaxed max-w-lg"
               style={{ color: "rgba(255,255,255,0.7)" }}
             >
               {magazine.description}
