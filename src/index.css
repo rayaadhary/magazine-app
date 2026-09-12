@@ -1,21 +1,23 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-body {
-  margin: 0;
-  -webkit-tap-highlight-color: transparent;
-}
+  body {
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-#root {
-  min-height: 100vh;
-}
+  #root {
+    min-height: 100vh;
+  }
 
-::selection {
-  background: rgba(74, 123, 200, 0.2);
-  color: var(--text, #1a2a42);
+  ::selection {
+    background: rgba(74, 123, 200, 0.2);
+    color: var(--text, #1a2a42);
+  }
 }

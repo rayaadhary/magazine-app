@@ -61,27 +61,6 @@ export default function Home() {
 
   if (loading) return <HomeSkeleton />;
 
-  if (!magazine) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-6">
-        <div
-          className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl mb-5"
-          style={{
-            background: "linear-gradient(135deg, #e8a838 0%, #f0c060 100%)",
-          }}
-        >
-          <span role="img" aria-hidden="true">
-            📖
-          </span>
-        </div>
-        <h2 className="text-xl font-bold text-[#1a2a42]">Belum Ada Majalah</h2>
-        <p className="text-sm mt-2 max-w-xs" style={{ color: "#6b7a90" }}>
-          Majalah edisi terbaru akan muncul di sini setelah dipublikasikan.
-        </p>
-      </div>
-    );
-  }
-
   const formatDate = (d) =>
     new Date(d).toLocaleDateString("id-ID", {
       day: "numeric",
@@ -90,76 +69,100 @@ export default function Home() {
     });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
       {/* Hero Section */}
       <section
-        className="relative overflow-hidden rounded-2xl px-6 py-10 sm:px-12 sm:py-14 text-center"
+        className="relative overflow-hidden rounded-3xl px-6 py-8 sm:px-10 sm:py-10 text-center shadow-xl border border-white/10"
         style={{
           background:
-            "linear-gradient(135deg, #0f2447 0%, #1a3666 50%, #2c5294 100%)",
+            "radial-gradient(circle at top, #1a3666 0%, #0f2447 70%, #081427 100%)",
         }}
       >
+        {/* Background Overlay */}
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
           style={{
             backgroundImage:
               "radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)",
-            backgroundSize: "24px 24px",
+            backgroundSize: "20px 20px",
           }}
         />
-        <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center text-center gap-3 sm:gap-4">
-          <span
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
-            style={{ background: "rgba(240, 184, 40, 0.15)", color: "#f0b828" }}
-          >
-            Edisi Terbaru
-          </span>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight leading-tight">
-            {magazine.title}
+        <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center justify-center space-y-4">
+          <div className="flex items-center justify-center gap-4 sm:gap-8 w-full">
+            <span className="px-3.5 py-1 rounded-full text-[14px] font-extrabold tracking-widest text-white whitespace-nowrap shrink-0">
+              Majalah Digital SMP Musix
+            </span>
+
+            <img
+              src="/logo-sittah.png"
+              alt="Sittah Magazine"
+              className="h-20 sm:h-28 w-auto object-contain drop-shadow-md shrink-0"
+              onError={(e) => { e.target.style.display = "none"; }}
+            />
+
+            <span className="px-3.5 py-1 rounded-full text-[14px] font-extrabold tracking-widest text-white whitespace-nowrap shrink-0">
+              Majalah Digital SMP Musix
+            </span>
+          </div>
+
+
+          {/* Badge Edisi */}
+
+          {/* Judul Edisi */}
+          <h1 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-wide leading-tight drop-shadow-sm">
+            <span style={{ color: "#f0b828" }}>SITTAH</span> MAGAZINE
           </h1>
 
-          <img
-            src="/logo-sittah-2.png"
-            alt="Sittah Magazine"
-            className="h-28 sm:h-36 w-auto max-w-[320px] sm:max-w-[420px] object-contain mx-auto block"
-            onError={(e) => { e.target.style.display = "none"; }}
-          />
-
-          {magazine.description && (
-            <p
-              className="text-sm sm:text-base leading-relaxed max-w-lg"
-              style={{ color: "rgba(255,255,255,0.7)" }}
-            >
-              {magazine.description}
-            </p>
-          )}
-          <time
-            className="inline-block text-xs font-semibold"
-            style={{ color: "rgba(255,255,255,0.45)" }}
+          {/* Deskripsi */}
+          <p
+            className="text-xs sm:text-sm leading-relaxed max-w-md font-normal"
+            style={{ color: "rgba(255,255,255,0.75)" }}
           >
-            {formatDate(magazine.published_at)}
-          </time>
-        </div>
-      </section>
-      {/* Main Flipbook */}
-      <section
-        id="flipbook"
-        className="rounded-2xl overflow-hidden"
-        style={{
-          background: "rgba(15, 36, 71, 0.03)",
-          border: "1px solid #edf0f5",
-        }}
-      >
-        <div className="p-2 sm:p-4">
-          <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+            {magazine
+              ? magazine.description
+              : "Majalah edisi terbaru akan muncul di sini setelah dipublikasikan."}
+          </p>
+
+          {/* Tanggal Publikasi */}
+          {magazine && (
+            <div className="pt-1">
+              <time
+                className="inline-block px-3 py-1 rounded-md text-[11px] font-medium tracking-wide"
+                style={{
+                  color: "rgba(255,255,255,0.6)",
+                  background: "rgba(255, 255, 255, 0.05)",
+                }}
+              >
+                Dipublikasikan: {formatDate(magazine.published_at)}
+              </time>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Comment Section */}
-      <div className="max-w-4xl mx-auto pt-4">
-        <CommentSection magazineId={magazine.id} />
-      </div>
+      {/* Main Flipbook */}
+      {magazine && (
+        <>
+          <section
+            id="flipbook"
+            className="rounded-2xl overflow-hidden shadow-sm"
+            style={{
+              background: "rgba(15, 36, 71, 0.03)",
+              border: "1px solid #edf0f5",
+            }}
+          >
+            <div className="p-2 sm:p-4">
+              <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+            </div>
+          </section>
+
+          {/* Comment Section */}
+          <div className="max-w-4xl mx-auto pt-4">
+            <CommentSection magazineId={magazine.id} />
+          </div>
+        </>
+      )}
 
       {/* Majalah Lainnya */}
       {others.length > 0 && (
