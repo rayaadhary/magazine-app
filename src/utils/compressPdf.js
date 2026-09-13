@@ -2,8 +2,8 @@ import { pdfjs } from "react-pdf";
 import { PDFDocument } from "pdf-lib";
 
 const MAX_SIZE = 4 * 1024 * 1024;
-const JPEG_QUALITY = 0.6;
-const INITIAL_SCALE = 0.35;
+const JPEG_QUALITY = 0.75;
+const INITIAL_SCALE = 0.55;
 
 async function renderPageToJpeg(pdf, pageNum, scale, quality) {
   const page = await pdf.getPage(pageNum);
@@ -52,7 +52,7 @@ export async function compressPdf(file, onProgress) {
   let scale = INITIAL_SCALE;
   let blob = await compressWithScale(file, scale, onProgress);
 
-  while (blob.size > MAX_SIZE && scale > 0.15) {
+  while (blob.size > MAX_SIZE && scale > 0.3) {
     scale -= 0.05;
     blob = await compressWithScale(file, scale, onProgress);
   }
