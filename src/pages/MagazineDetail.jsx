@@ -71,7 +71,7 @@ export default function MagazineDetail() {
       <section className="rounded-2xl overflow-hidden"
         style={{ background: "rgba(15, 36, 71, 0.03)", border: "1px solid #edf0f5" }}>
         <div className="p-2 sm:p-4">
-          <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+          <FlipbookViewer pdfUrl={magazinePdfUrl(magazine)} />
         </div>
       </section>
 

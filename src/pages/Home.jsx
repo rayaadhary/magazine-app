@@ -41,7 +41,7 @@ export default function Home() {
         Promise.all(
           filtered.map(async (m) => [
             m.id,
-            await renderThumb(magazinePdfUrl(m.id)),
+            await renderThumb(magazinePdfUrl(m)),
           ]),
         ).then((entries) => {
           if (!cancelled) setThumbs(Object.fromEntries(entries));
@@ -153,7 +153,7 @@ export default function Home() {
             }}
           >
             <div className="p-2 sm:p-4">
-              <FlipbookViewer pdfUrl={magazinePdfUrl(magazine.id)} />
+              <FlipbookViewer pdfUrl={magazinePdfUrl(magazine)} />
             </div>
           </section>
 

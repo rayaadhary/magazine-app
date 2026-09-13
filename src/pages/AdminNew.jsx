@@ -14,12 +14,12 @@ export default function AdminNew() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) { setError("Pilih file PDF"); return; }
+    if (file.size > 10 * 1024 * 1024) { setError("File terlalu besar, maksimal 10MB"); return; }
     setError("");
     setLoading(true);
     try {
-      await createMagazine(title, description, file, (p) => {
-        if (p.phase === "render") setCompressing(`Mengkompresi halaman ${p.current}/${p.total}...`);
-        else if (p.phase === "build") setCompressing("Menyusun PDF...");
+      await createMagazine(title, description, file, () => {
+        setCompressing("Mengupload PDF ke storage...");
       });
       navigate("/admin");
     } catch (err) {

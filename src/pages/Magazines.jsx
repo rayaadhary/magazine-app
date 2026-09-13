@@ -36,7 +36,7 @@ export default function Magazines() {
         Promise.all(
           list.map(async (m) => [
             m.id,
-            await renderThumb(magazinePdfUrl(m.id)),
+            await renderThumb(magazinePdfUrl(m)),
           ]),
         ).then((entries) => {
           if (!cancelled) setThumbs(Object.fromEntries(entries));

@@ -25,9 +25,8 @@ export default function AdminEdit() {
     setError("");
     setSaving(true);
     try {
-      await updateMagazine(id, title, description, file, (p) => {
-        if (p.phase === "render") setCompressing(`Mengkompresi halaman ${p.current}/${p.total}...`);
-        else if (p.phase === "build") setCompressing("Menyusun PDF...");
+      await updateMagazine(id, title, description, file, () => {
+        setCompressing("Mengupload PDF ke storage...");
       });
       navigate("/admin");
     } catch (err) {

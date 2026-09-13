@@ -1,4 +1,4 @@
-import { compressPdf } from "./utils/compressPdf";
+import { uploadPdf, deletePdf } from "./utils/supabase";
 
 const API_BASE = "/api";
 
@@ -48,33 +48,37 @@ export async function getMagazine(id) {
 }
 
 export async function createMagazine(title, description, file, onProgress) {
-  const finalFile = await compressPdf(file, onProgress);
-  const form = new FormData();
-  form.append("title", title);
-  form.append("description", description);
-  form.append("file", finalFile);
-  const res = await request("/magazines", { method: "POST", body: form });
+  if (onProgress) onProgress({ phase: "upload", current: 0, total: 1 });
+  const pdf_url = await uploadPdf(file, onProgress);
+  const res = await request("/magazines", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, description, pdf_url }),
+  });
   return res.json();
 }
 
 export async function updateMagazine(id, title, description, file, onProgress) {
-  const form = new FormData();
-  form.append("title", title);
-  form.append("description", description);
+  const body = { title, description };
   if (file) {
-    const finalFile = await compressPdf(file, onProgress);
-    form.append("file", finalFile);
+    if (onProgress) onProgress({ phase: "upload", current: 0, total: 1 });
+    body.pdf_url = await uploadPdf(file, onProgress);
   }
-  const res = await request(`/magazines/${id}`, { method: "PUT", body: form });
+  const res = await request(`/magazines/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
   return res.json();
 }
 
-export async function deleteMagazine(id) {
+export async function deleteMagazine(id, pdfUrl) {
+  if (pdfUrl) await deletePdf(pdfUrl);
   await request(`/magazines/${id}`, { method: "DELETE" });
 }
 
-export function magazinePdfUrl(id) {
-  return `/api/magazines/${id}/pdf`;
+export function magazinePdfUrl(magazine) {
+  return magazine?.pdf_url || "";
 }
 
 export async function getComments(magazineId) {
