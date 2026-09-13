@@ -1,3 +1,5 @@
+import { compressPdf } from "./utils/compressPdf";
+
 const API_BASE = "/api";
 
 async function request(path, options = {}) {
@@ -45,20 +47,24 @@ export async function getMagazine(id) {
   return res.json();
 }
 
-export async function createMagazine(title, description, file) {
+export async function createMagazine(title, description, file, onProgress) {
+  const finalFile = await compressPdf(file, onProgress);
   const form = new FormData();
   form.append("title", title);
   form.append("description", description);
-  form.append("file", file);
+  form.append("file", finalFile);
   const res = await request("/magazines", { method: "POST", body: form });
   return res.json();
 }
 
-export async function updateMagazine(id, title, description, file) {
+export async function updateMagazine(id, title, description, file, onProgress) {
   const form = new FormData();
   form.append("title", title);
   form.append("description", description);
-  if (file) form.append("file", file);
+  if (file) {
+    const finalFile = await compressPdf(file, onProgress);
+    form.append("file", finalFile);
+  }
   const res = await request(`/magazines/${id}`, { method: "PUT", body: form });
   return res.json();
 }

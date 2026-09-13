@@ -8,6 +8,7 @@ export default function AdminNew() {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [compressing, setCompressing] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -16,11 +17,15 @@ export default function AdminNew() {
     setError("");
     setLoading(true);
     try {
-      await createMagazine(title, description, file);
+      await createMagazine(title, description, file, (p) => {
+        if (p.phase === "render") setCompressing(`Mengkompresi halaman ${p.current}/${p.total}...`);
+        else if (p.phase === "build") setCompressing("Menyusun PDF...");
+      });
       navigate("/admin");
     } catch (err) {
       setError(err.message || "Gagal menyimpan");
     }
+    setCompressing("");
     setLoading(false);
   };
 
@@ -37,7 +42,7 @@ export default function AdminNew() {
         <input type="file" accept=".pdf" onChange={(e) => setFile(e.target.files[0])} required />
         <div className="form-actions">
           <button type="submit" disabled={loading} className="btn-primary">
-            {loading ? "Menyimpan..." : "Simpan"}
+            {loading ? (compressing || "Menyimpan...") : "Simpan"}
           </button>
           <button type="button" onClick={() => navigate("/admin")} className="btn-cancel">Batal</button>
         </div>

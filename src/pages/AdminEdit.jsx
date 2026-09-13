@@ -10,6 +10,7 @@ export default function AdminEdit() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [compressing, setCompressing] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -24,11 +25,15 @@ export default function AdminEdit() {
     setError("");
     setSaving(true);
     try {
-      await updateMagazine(id, title, description, file);
+      await updateMagazine(id, title, description, file, (p) => {
+        if (p.phase === "render") setCompressing(`Mengkompresi halaman ${p.current}/${p.total}...`);
+        else if (p.phase === "build") setCompressing("Menyusun PDF...");
+      });
       navigate("/admin");
     } catch (err) {
       setError(err.message || "Gagal menyimpan");
     }
+    setCompressing("");
     setSaving(false);
   };
 
@@ -47,7 +52,7 @@ export default function AdminEdit() {
         <input type="file" accept=".pdf" onChange={(e) => setFile(e.target.files[0])} />
         <div className="form-actions">
           <button type="submit" disabled={saving} className="btn-primary">
-            {saving ? "Menyimpan..." : "Simpan"}
+            {saving ? (compressing || "Menyimpan...") : "Simpan"}
           </button>
           <button type="button" onClick={() => navigate("/admin")} className="btn-cancel">Batal</button>
         </div>
