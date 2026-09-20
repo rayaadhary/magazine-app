@@ -16,8 +16,9 @@
   --color-muted: #36516f;
   --color-muted-light: #6b7a90;
   --color-border: #e5e7eb;
-  --color-admin-bg: #0f0f0f;
-  --color-admin-border: #2a2a2a;
+  --color-admin-bg: #0b2342;
+  --color-admin-surface: #081a36;
+  --color-admin-border: #1a3666;
   --color-admin-text: #fdfbf7;
   --color-danger: #c0392b;
 }

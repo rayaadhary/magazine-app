@@ -237,11 +237,11 @@ function AdminDashboard() {
                 <XAxis dataKey="title" tick={{ fill: "#A0A0A0", fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#A0A0A0", fontSize: 10 }} axisLine={false} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ background: "#1A1A1A", border: "1px solid #2A2A2A", borderRadius: 0, color: "#FDFBF7" }}
+                  contentStyle={{ background: "#081a36", border: "1px solid #1a3666", borderRadius: 0, color: "#FDFBF7" }}
                   itemStyle={{ color: "#FDFBF7" }}
                 />
-                <Bar dataKey="visits" fill="#C5A059" name="Kunjungan" />
-                <Bar dataKey="reads" fill="#D4AF37" name="Baca" />
+                <Bar dataKey="visits" fill="#f2c230" name="Kunjungan" />
+                <Bar dataKey="reads" fill="#d4af37" name="Baca" />
               </BarChart>
             </ResponsiveContainer>
           </div>
