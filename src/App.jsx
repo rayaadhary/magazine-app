@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
 import Header from "./components/Header";
 import PublicFooter from "./components/PublicFooter";
+import PageTransition from "./components/PageTransition";
 import Home from "./pages/Home";
 import Archive from "./pages/Archive";
 import Reader from "./pages/Reader";
@@ -9,13 +10,16 @@ import Login from "./pages/Login";
 import Admin, { AdminDashboard } from "./pages/Admin";
 import AdminNew from "./pages/AdminNew";
 import AdminEdit from "./pages/AdminEdit";
+import AdminModeration from "./pages/AdminModeration";
 import "./App.css";
 
 function PublicLayout({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <PublicFooter />
     </div>
   );
@@ -41,6 +45,7 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="new" element={<AdminNew />} />
             <Route path=":id/edit" element={<AdminEdit />} />
+            <Route path="moderation" element={<AdminModeration />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -98,3 +98,35 @@ export async function addComment(magazineId, authorName, text) {
 export async function deleteComment(commentId) {
   await request(`/comments/${commentId}`, { method: "DELETE" });
 }
+
+export async function trackMagazine(id, kind) {
+  await request(`/magazines/${id}/track`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kind }),
+  });
+}
+
+export async function getAnalytics(period = "all") {
+  const res = await request(`/analytics?period=${period}`);
+  return res.json();
+}
+
+export async function getAllComments() {
+  const res = await request("/comments");
+  return res.json();
+}
+
+export async function moderateComment(id, status) {
+  const res = await request(`/comments/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  return res.json();
+}
+
+export async function exportAnalyticsCsv(period = "all") {
+  const res = await request(`/analytics/export.csv?period=${period}`);
+  return res.blob();
+}
