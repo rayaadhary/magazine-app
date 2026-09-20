@@ -5,12 +5,15 @@
   --font-heading: 'Cormorant Garamond', serif;
   --font-body: 'Outfit', sans-serif;
 
+  --color-navy: #0b2342;
+  --color-navy-dark: #081427;
+  --color-navy-light: #1a3666;
+  --color-gold: #C5A059;
+  --color-gold-rich: #A88523;
   --color-cream: #FDFBF7;
   --color-warm: #F4F0E6;
   --color-text: #0A0A0A;
   --color-text-secondary: #4A4A4A;
-  --color-gold: #C5A059;
-  --color-gold-rich: #A88523;
   --color-border: #e5e7eb;
 
   --color-admin-bg: #0F0F0F;
@@ -34,8 +37,8 @@
     font-family: 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
-    background: #FDFBF7;
-    color: #0A0A0A;
+    background: #ffffff;
+    color: #0b2342;
   }
 
   #root {
@@ -44,6 +47,6 @@
 
   ::selection {
     background: rgba(197, 160, 89, 0.25);
-    color: #0A0A0A;
+    color: #0b2342;
   }
 }

@@ -3,12 +3,13 @@ import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { getAnalytics, exportAnalyticsCsv } from "../api";
-import { BarChart3, ShieldCheck, LogOut, Users, Eye, Activity, MessageCircle, Download, Menu, X } from "lucide-react";
+import { BarChart3, ShieldCheck, LogOut, Users, Eye, Activity, MessageCircle, Download, Menu, X, FileText } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 
 const navItems = [
   { to: "/admin", label: "Ringkasan", icon: BarChart3, end: true },
+  { to: "/admin/issues", label: "Daftar Edisi", icon: FileText, end: false },
   { to: "/admin/moderation", label: "Moderasi", icon: ShieldCheck, end: false },
 ];
 

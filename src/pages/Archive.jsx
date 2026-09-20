@@ -57,13 +57,24 @@ export default function Archive() {
   }
 
   return (
-    <div className="min-h-screen bg-cream text-text" data-testid="archive-page">
-      <main className="mx-auto max-w-[1380px] px-12 py-24 sm:px-16 lg:px-16 lg:py-32">
-        <div className="flex flex-col justify-between gap-8 border-b border-[#0A0A0A]/10 pb-16 sm:flex-row sm:items-end">
+    <div className="min-h-screen bg-white text-navy" data-testid="archive-page">
+      <header className="flex h-[72px] items-center justify-center bg-navy px-5 text-white">
+        <Link to="/" className="text-center">
+          <div className="font-heading text-2xl sm:text-3xl font-black tracking-tight">
+            SITTAH MAGAZINE
+          </div>
+          <div className="mt-1 text-[6px] sm:text-[7px] font-semibold uppercase tracking-[0.18em] text-gold">
+            Majalah Digital SMP Muhammadiyah 6 Surabaya
+          </div>
+        </Link>
+      </header>
+
+      <main className="mx-auto max-w-[1380px] px-12 py-16 sm:px-16 lg:px-16 lg:py-24">
+        <div className="flex flex-col justify-between gap-8 border-b border-navy/10 pb-12 sm:flex-row sm:items-end">
           <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-text-secondary hover:text-gold transition-colors"
+              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-navy/60 hover:text-gold transition-colors"
               data-testid="archive-back"
             >
               <ArrowLeft size={15} />
@@ -75,7 +86,7 @@ export default function Archive() {
             <h1 className="mt-2 font-heading text-5xl leading-none sm:text-6xl font-black tracking-tight">
               Etalase majalah
             </h1>
-            <p className="mt-4 max-w-[520px] text-sm leading-6 text-text-secondary">
+            <p className="mt-4 max-w-[520px] text-sm leading-6 text-navy/60">
               Semua edisi majalah yang pernah diterbitkan oleh Sittah Magazine.
             </p>
           </div>
@@ -83,11 +94,11 @@ export default function Archive() {
 
         {magazines.length === 0 ? (
           <div className="min-h-[40vh] flex flex-col items-center justify-center text-center p-6">
-            <div className="w-20 h-20 flex items-center justify-center text-3xl mb-5 bg-[#0A0A0A]">
+            <div className="w-20 h-20 flex items-center justify-center text-3xl mb-5 bg-navy">
               <BookOpen className="text-gold" size={28} />
             </div>
-            <h2 className="text-lg font-bold text-text">Belum Ada Majalah</h2>
-            <p className="text-sm mt-2 text-text-secondary">Arsip majalah akan ditampilkan di sini.</p>
+            <h2 className="text-lg font-bold text-navy">Belum Ada Majalah</h2>
+            <p className="text-sm mt-2 text-navy/60">Arsip majalah akan ditampilkan di sini.</p>
           </div>
         ) : (
           <div className="mt-10 grid grid-cols-1 md:grid-cols-12 gap-8">
@@ -98,7 +109,7 @@ export default function Archive() {
                 className={`group flex flex-col focus:outline-none ${i === 0 ? "md:col-span-8" : i <= 2 ? "md:col-span-4" : "md:col-span-3"}`}
                 data-testid={`archive-card-${m.id}`}
               >
-                <div className="relative aspect-[3/4] w-full overflow-hidden border border-[#0A0A0A]/15 border-t-gold bg-cream transition-colors group-hover:border-gold">
+                <div className="relative aspect-[3/4] w-full overflow-hidden border-2 border-navy/10 border-t-gold bg-white transition-colors group-hover:border-gold">
                   {thumbs[m.id] ? (
                     <img
                       src={thumbs[m.id]}
@@ -113,7 +124,7 @@ export default function Archive() {
                   <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold">
                     {new Date(m.published_at).toLocaleDateString("id-ID", { month: "short", year: "numeric" })}
                   </div>
-                  <span className="mt-1 text-sm font-bold text-text leading-snug line-clamp-2 group-hover:text-gold transition-colors flex items-center gap-1.5">
+                  <span className="mt-1 text-sm font-bold text-navy leading-snug line-clamp-2 group-hover:text-gold transition-colors flex items-center gap-1.5">
                     {m.title}
                     <ArrowUpRight size={13} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-gold" />
                   </span>

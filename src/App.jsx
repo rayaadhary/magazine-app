@@ -11,6 +11,7 @@ import Admin, { AdminDashboard } from "./pages/Admin";
 import AdminNew from "./pages/AdminNew";
 import AdminEdit from "./pages/AdminEdit";
 import AdminModeration from "./pages/AdminModeration";
+import AdminIssues from "./pages/AdminIssues";
 import "./App.css";
 
 function PublicLayout({ children }) {
@@ -43,6 +44,7 @@ function App() {
           {/* Admin routes */}
           <Route path="/admin" element={<Admin />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="issues" element={<AdminIssues />} />
             <Route path="new" element={<AdminNew />} />
             <Route path=":id/edit" element={<AdminEdit />} />
             <Route path="moderation" element={<AdminModeration />} />

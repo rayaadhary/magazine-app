@@ -44,10 +44,10 @@ export default function Reader() {
   if (isError || !magazine) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-8">
-        <p className="font-heading text-4xl text-text">Edisi tidak ditemukan.</p>
+        <p className="font-heading text-4xl text-navy">Edisi tidak ditemukan.</p>
         <Link
           to="/"
-          className="mt-6 inline-block border-b border-text pb-2 text-xs uppercase tracking-[0.2em] text-text hover:text-gold transition-colors"
+          className="mt-6 inline-block border-b border-navy pb-2 text-xs uppercase tracking-[0.2em] text-navy hover:text-gold transition-colors"
           data-testid="reader-back-error"
         >
           Kembali ke arsip
@@ -57,35 +57,35 @@ export default function Reader() {
   }
 
   return (
-    <div className="min-h-screen bg-cream text-text" data-testid="reader-page">
-      <div className="mx-auto max-w-[1100px] px-12 py-16 sm:px-16">
+    <div className="min-h-screen bg-warm text-navy">
+      <div className="mx-auto max-w-[1100px] px-12 py-12 sm:px-16">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-text-secondary hover:text-gold transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-navy/60 hover:text-gold transition-colors mb-6"
           data-testid="reader-back"
         >
           <ArrowLeft size={15} />
           Kembali
         </Link>
 
-        <header className="space-y-3 pb-8 border-b border-[#0A0A0A]/10">
+        <header className="space-y-3 pb-6 border-b border-navy/10">
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight font-heading">
             {magazine.title}
           </h1>
           {magazine.description && (
-            <p className="text-sm sm:text-base leading-relaxed text-text-secondary">
+            <p className="text-sm sm:text-base leading-relaxed text-navy/60">
               {magazine.description}
             </p>
           )}
         </header>
 
-        <section className="mt-10 overflow-hidden border border-[#0A0A0A]/10 bg-[url('https://images.unsplash.com/photo-1686806372785-fcfe9efa9b70?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzZ8MHwxfHNlYXJjaHwyfHxjcmVhbXklMjBwYXBlciUyMHRleHR1cmUlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc4ODE4NTU2NHww&ixlib=rb-4.1.0&q=85')] bg-cover bg-center shadow-[0_24px_64px_rgba(10,10,10,0.18)]" data-testid="reader-flipbook-wrapper">
+        <section className="mt-8 overflow-hidden border-2 border-navy/10 bg-white shadow-[0_24px_64px_rgba(11,35,66,0.14)]" data-testid="reader-flipbook-wrapper">
           <div className="p-4 sm:p-8">
             <FlipbookViewer pdfUrl={magazinePdfUrl(magazine)} />
           </div>
         </section>
 
-        <section className="mt-10">
+        <section className="mt-8">
           <CommentSection magazineId={magazine.id} />
         </section>
       </div>
