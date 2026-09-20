@@ -1,4 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+
+  --color-navy: #0b2342;
+  --color-navy-dark: #081427;
+  --color-navy-light: #1a3666;
+  --color-gold: #f2c230;
+  --color-gold-rich: #d4af37;
+  --color-gold-hover: #d9a420;
+  --color-cream: #fdfbf7;
+  --color-warm: #f4f0e6;
+  --color-muted: #36516f;
+  --color-muted-light: #6b7a90;
+  --color-border: #e5e7eb;
+  --color-admin-bg: #0f0f0f;
+  --color-admin-border: #2a2a2a;
+  --color-admin-text: #fdfbf7;
+  --color-danger: #c0392b;
+}
 
 @layer base {
   * {
@@ -9,6 +31,8 @@
 
   body {
     margin: 0;
+    font-family: 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -17,7 +41,7 @@
   }
 
   ::selection {
-    background: rgba(74, 123, 200, 0.2);
-    color: var(--text, #1a2a42);
+    background: rgba(242, 194, 48, 0.25);
+    color: #0b2342;
   }
 }

@@ -1,15 +1,25 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { pdfjs } from 'react-pdf'
+import { Toaster } from 'sonner'
 
-// react-pdf sets workerSrc to 'pdf.worker.mjs', override to serve from public/
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs'
 
 import './index.css'
 import App from './App.jsx'
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, refetchOnWindowFocus: false },
+  },
+})
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <Toaster position="bottom-right" richColors />
+    </QueryClientProvider>
   </StrictMode>,
 )
