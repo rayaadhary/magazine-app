@@ -14,10 +14,12 @@ export default function AdminModeration() {
   const moderate = useMutation({
     mutationFn: ({ id, status }) => moderateComment(id, status),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: ["admin-comments"] });
       toast.success("Status komentar diperbarui");
     },
     onError: () => toast.error("Gagal memperbarui komentar"),
+    onSettled: () => {
+      client.invalidateQueries({ queryKey: ["admin-comments"] });
+    },
   });
 
   return (
@@ -52,13 +54,14 @@ export default function AdminModeration() {
                 </div>
                 <button
                   type="button"
+                  disabled={moderate.isPending}
                   onClick={() =>
                     moderate.mutate({
                       id: comment.id,
                       status: comment.status === "visible" ? "hidden" : "visible",
                     })
                   }
-                  className={`flex h-fit items-center gap-2 border px-3 py-2 text-[10px] uppercase tracking-[0.14em] transition-colors ${
+                  className={`flex h-fit items-center gap-2 border px-3 py-2 text-[10px] uppercase tracking-[0.14em] transition-colors disabled:opacity-40 ${
                     comment.status === "visible"
                       ? "border-gold/50 text-gold hover:bg-gold hover:text-navy"
                       : "border-red-800 text-red-300 hover:bg-red-800 hover:text-white"

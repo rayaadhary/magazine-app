@@ -80,12 +80,8 @@ export default function AdminIssues() {
           <div className="divide-y divide-admin-border">
             {magazines.map((m) => (
               <div key={m.id} className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_auto_auto_auto] gap-4 items-center px-5 py-4 hover:bg-admin-surface/50 transition-colors">
-                <div className="w-12 h-16 bg-navy overflow-hidden shrink-0">
-                  <img
-                    src={magazinePdfUrl(m) ? `https://images.unsplash.com/photo-1741356474365-5f0041f89eaa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBtYWdhemluZSUyMGNvdmVyJTIwYmxhY2slMjBnb2xkfGVufDB8fHx8MTc4ODE4NTU2NHww&ixlib=rb-4.1.0&q=85` : ""}
-                    alt={m.title}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="w-12 h-16 bg-navy overflow-hidden shrink-0 flex items-center justify-center text-gold text-xs font-bold">
+                  {m.title?.charAt(0)?.toUpperCase() || "?"}
                 </div>
 
                 <div className="min-w-0">
