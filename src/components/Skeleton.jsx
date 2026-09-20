@@ -9,7 +9,7 @@ export function Skeleton({ className = "" }) {
 export function HomeSkeleton() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 space-y-10">
-      <div className="relative overflow-hidden rounded-2xl p-8 sm:p-12 bg-navy">
+      <div className="relative overflow-hidden rounded-2xl p-8 sm:p-12 bg-gradient-to-br from-navy via-navy-light to-navy">
         <div className="space-y-3 text-center max-w-2xl mx-auto">
           <Skeleton className="h-6 w-28 mx-auto rounded-full bg-white/15" />
           <Skeleton className="h-10 w-3/4 mx-auto rounded-xl bg-white/10" />

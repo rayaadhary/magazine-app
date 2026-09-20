@@ -1,28 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-heading: 'Cormorant Garamond', serif;
+  --font-heading: 'Outfit', sans-serif;
   --font-body: 'Outfit', sans-serif;
 
   --color-navy: #0b2342;
   --color-navy-dark: #081427;
   --color-navy-light: #1a3666;
-  --color-gold: #C5A059;
-  --color-gold-rich: #A88523;
-  --color-cream: #FDFBF7;
-  --color-warm: #F4F0E6;
-  --color-text: #0A0A0A;
-  --color-text-secondary: #4A4A4A;
+  --color-gold: #f2c230;
+  --color-gold-rich: #d4af37;
+  --color-gold-hover: #d9a420;
+  --color-cream: #fdfbf7;
+  --color-warm: #f4f0e6;
+  --color-muted: #36516f;
+  --color-muted-light: #6b7a90;
   --color-border: #e5e7eb;
-
-  --color-admin-bg: #0F0F0F;
-  --color-admin-surface: #1A1A1A;
-  --color-admin-border: #2A2A2A;
-  --color-admin-text: #FDFBF7;
-  --color-admin-secondary: #A0A0A0;
-  --color-admin-gold: #D4AF37;
-  --color-danger: #8C2A2A;
+  --color-admin-bg: #0f0f0f;
+  --color-admin-border: #2a2a2a;
+  --color-admin-text: #fdfbf7;
+  --color-danger: #c0392b;
 }
 
 @layer base {
@@ -37,8 +34,6 @@
     font-family: 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
-    background: #ffffff;
-    color: #0b2342;
   }
 
   #root {
@@ -46,7 +41,7 @@
   }
 
   ::selection {
-    background: rgba(197, 160, 89, 0.25);
+    background: rgba(242, 194, 48, 0.25);
     color: #0b2342;
   }
 }

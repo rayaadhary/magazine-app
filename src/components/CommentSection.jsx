@@ -42,7 +42,7 @@ export default function CommentSection({ magazineId }) {
   };
 
   return (
-    <section className="border-t border-navy/10 pt-8" data-testid="comment-section">
+    <section className="border-t border-border pt-8" data-testid="comment-section">
       <h3 className="text-lg font-bold text-navy mb-5">Komentar</h3>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-[600px] mb-8" data-testid="comment-form">
         <input
@@ -51,7 +51,7 @@ export default function CommentSection({ magazineId }) {
           value={authorName}
           onChange={(e) => setAuthorName(e.target.value)}
           required
-          className="px-4 py-2.5 border-b border-navy rounded-none text-sm font-body bg-transparent focus:outline-none focus:border-gold transition-colors"
+          className="px-4 py-2.5 border-[1.5px] border-border rounded-md text-sm font-body bg-white focus:outline-none focus:border-[#4a7bc8] focus:ring-2 focus:ring-[#4a7bc8]/12 transition-all"
           data-testid="comment-author-input"
         />
         <textarea
@@ -60,13 +60,13 @@ export default function CommentSection({ magazineId }) {
           onChange={(e) => setText(e.target.value)}
           required
           rows={3}
-          className="px-4 py-2.5 border-b border-navy rounded-none text-sm font-body bg-transparent focus:outline-none focus:border-gold transition-colors resize-none"
+          className="px-4 py-2.5 border-[1.5px] border-border rounded-md text-sm font-body bg-white focus:outline-none focus:border-[#4a7bc8] focus:ring-2 focus:ring-[#4a7bc8]/12 transition-all resize-none"
           data-testid="comment-text-input"
         />
         <button
           type="submit"
           disabled={submitMutation.isPending}
-          className="self-start inline-flex items-center gap-2 px-6 py-2.5 bg-navy text-gold border-none rounded-none text-sm font-bold cursor-pointer hover:bg-navy-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="self-start inline-flex items-center gap-2 px-6 py-2.5 bg-navy text-white border-none rounded-md text-sm font-bold cursor-pointer hover:bg-navy-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="comment-submit"
         >
           <Send size={14} />
@@ -75,13 +75,13 @@ export default function CommentSection({ magazineId }) {
       </form>
       <div className="max-w-[600px]">
         {comments.length === 0 && (
-          <p className="text-navy/60 text-sm">Belum ada komentar. Jadilah yang pertama!</p>
+          <p className="text-muted-light text-sm">Belum ada komentar. Jadilah yang pertama!</p>
         )}
         {comments.map((c) => (
-          <div key={c.id} className="py-4 border-b border-navy/10">
+          <div key={c.id} className="py-4 border-b border-border/60">
             <div className="flex items-center gap-3 mb-1">
               <strong className="text-sm text-navy">{c.author_name}</strong>
-              <span className="text-xs text-navy/60">
+              <span className="text-xs text-muted-light">
                 {new Date(c.created_at).toLocaleDateString("id-ID")}
               </span>
               {user && (user.role === "pembina" || user.role === "waka") && (

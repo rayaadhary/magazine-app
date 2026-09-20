@@ -57,11 +57,11 @@ export default function Reader() {
   }
 
   return (
-    <div className="min-h-screen bg-warm text-navy">
-      <div className="mx-auto max-w-[1100px] px-12 py-12 sm:px-16">
+    <div className="min-h-screen bg-warm text-navy" data-testid="reader-page">
+      <div className="mx-auto max-w-[1100px] px-5 py-8 sm:px-10">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-navy/60 hover:text-gold transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-muted hover:text-gold transition-colors mb-6"
           data-testid="reader-back"
         >
           <ArrowLeft size={15} />
@@ -73,14 +73,14 @@ export default function Reader() {
             {magazine.title}
           </h1>
           {magazine.description && (
-            <p className="text-sm sm:text-base leading-relaxed text-navy/60">
+            <p className="text-sm sm:text-base leading-relaxed text-muted">
               {magazine.description}
             </p>
           )}
         </header>
 
-        <section className="mt-8 overflow-hidden border-2 border-navy/10 bg-white shadow-[0_24px_64px_rgba(11,35,66,0.14)]" data-testid="reader-flipbook-wrapper">
-          <div className="p-4 sm:p-8">
+        <section className="mt-8 rounded-2xl overflow-hidden border border-navy/10 bg-white" data-testid="reader-flipbook-wrapper">
+          <div className="p-2 sm:p-4">
             <FlipbookViewer pdfUrl={magazinePdfUrl(magazine)} />
           </div>
         </section>

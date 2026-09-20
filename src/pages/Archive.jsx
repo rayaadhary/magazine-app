@@ -42,13 +42,13 @@ export default function Archive() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-[1380px] px-12 py-24 sm:px-16 lg:px-16 space-y-6">
-        <Skeleton className="h-9 w-64" />
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="mx-auto max-w-[1380px] px-5 py-10 sm:px-10 lg:px-14 space-y-6">
+        <Skeleton className="h-9 w-64 rounded-lg" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className={`${i === 1 ? "md:col-span-8" : i <= 3 ? "md:col-span-4" : "md:col-span-3"} space-y-3`}>
-              <Skeleton className="w-full aspect-[3/4]" />
-              <Skeleton className="h-4 w-3/4" />
+            <div key={i} className="space-y-3">
+              <Skeleton className="w-full aspect-[3/4] rounded-lg" />
+              <Skeleton className="h-4 w-3/4 rounded" />
             </div>
           ))}
         </div>
@@ -69,12 +69,12 @@ export default function Archive() {
         </Link>
       </header>
 
-      <main className="mx-auto max-w-[1380px] px-12 py-16 sm:px-16 lg:px-16 lg:py-24">
-        <div className="flex flex-col justify-between gap-8 border-b border-navy/10 pb-12 sm:flex-row sm:items-end">
+      <main className="mx-auto max-w-[1380px] px-5 py-10 sm:px-10 lg:px-14 lg:py-14">
+        <div className="flex flex-col justify-between gap-8 border-b border-navy/10 pb-10 sm:flex-row sm:items-end">
           <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-navy/60 hover:text-gold transition-colors"
+              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-muted hover:text-gold transition-colors"
               data-testid="archive-back"
             >
               <ArrowLeft size={15} />
@@ -83,10 +83,10 @@ export default function Archive() {
             <div className="mt-8 text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
               Koleksi lengkap
             </div>
-            <h1 className="mt-2 font-heading text-5xl leading-none sm:text-6xl font-black tracking-tight">
+            <h1 className="mt-2 font-heading text-5xl leading-none sm:text-6xl font-black">
               Etalase majalah
             </h1>
-            <p className="mt-4 max-w-[520px] text-sm leading-6 text-navy/60">
+            <p className="mt-4 max-w-[520px] text-sm leading-6 text-muted">
               Semua edisi majalah yang pernah diterbitkan oleh Sittah Magazine.
             </p>
           </div>
@@ -94,19 +94,19 @@ export default function Archive() {
 
         {magazines.length === 0 ? (
           <div className="min-h-[40vh] flex flex-col items-center justify-center text-center p-6">
-            <div className="w-20 h-20 flex items-center justify-center text-3xl mb-5 bg-navy">
-              <BookOpen className="text-gold" size={28} />
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl mb-5 bg-gradient-to-br from-gold to-gold-rich">
+              <BookOpen className="text-white" size={28} />
             </div>
             <h2 className="text-lg font-bold text-navy">Belum Ada Majalah</h2>
-            <p className="text-sm mt-2 text-navy/60">Arsip majalah akan ditampilkan di sini.</p>
+            <p className="text-sm mt-2 text-muted-light">Arsip majalah akan ditampilkan di sini.</p>
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-12 gap-8">
-            {magazines.map((m, i) => (
+          <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 sm:gap-8">
+            {magazines.map((m) => (
               <Link
                 to={`/read/${m.id}`}
                 key={m.id}
-                className={`group flex flex-col focus:outline-none ${i === 0 ? "md:col-span-8" : i <= 2 ? "md:col-span-4" : "md:col-span-3"}`}
+                className="group flex flex-col focus:outline-none"
                 data-testid={`archive-card-${m.id}`}
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden border-2 border-navy/10 border-t-gold bg-white transition-colors group-hover:border-gold">

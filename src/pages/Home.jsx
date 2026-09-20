@@ -46,7 +46,7 @@ function TopArchiveCard({ issue }) {
         <div className="mt-0.5 text-sm font-bold text-navy leading-tight truncate group-hover:text-gold transition-colors">
           {issue.title}
         </div>
-        <div className="mt-0.5 text-[11px] text-navy/60 line-clamp-1">
+        <div className="mt-0.5 text-[11px] text-muted-light line-clamp-1">
           {issue.description}
         </div>
       </div>
@@ -95,17 +95,24 @@ export default function Home() {
     });
 
   return (
-    <div className="mx-auto max-w-[1380px] px-12 py-24 sm:px-16 lg:px-16 space-y-24" data-testid="home-page">
-      {/* Hero — solid navy, no gradient */}
-      <section className="relative overflow-hidden bg-navy px-12 py-24 sm:px-16" data-testid="home-hero">
-        <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center space-y-5 text-center">
-          <div className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gold border border-gold/30">
+    <div className="mx-auto max-w-[1380px] px-5 py-10 sm:px-10 lg:px-14 space-y-12" data-testid="home-page">
+      {/* Hero */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-navy-light to-navy-dark px-6 py-12 sm:px-12 text-center" data-testid="home-hero">
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center space-y-5">
+          <div className="px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-gold border border-gold/30">
             Majalah Digital
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight leading-none font-heading">
             <span className="text-gold">SITTAH</span> MAGAZINE
           </h1>
-          <p className="text-sm sm:text-base leading-relaxed max-w-md text-white/60">
+          <p className="text-sm sm:text-base leading-relaxed max-w-md text-white/70">
             {magazine
               ? magazine.description
               : "Majalah edisi terbaru akan muncul di sini setelah dipublikasikan."}
@@ -136,7 +143,7 @@ export default function Home() {
             </h2>
             <Link
               to="/archive"
-              className="text-[11px] font-bold uppercase tracking-[0.12em] text-navy/60 hover:text-gold transition-colors inline-flex items-center gap-1"
+              className="text-[11px] font-bold uppercase tracking-[0.12em] text-muted hover:text-gold transition-colors inline-flex items-center gap-1"
               data-testid="home-view-all-top"
             >
               Lihat Semua <ArrowRight size={12} />
@@ -150,10 +157,10 @@ export default function Home() {
         </section>
       )}
 
-      {/* Main Flipbook — cream texture bg, deep shadow, no radius */}
+      {/* Main Flipbook */}
       {magazine && (
-        <section className="overflow-hidden border-2 border-navy/10 bg-warm shadow-[0_24px_64px_rgba(11,35,66,0.14)]" data-testid="home-flipbook-wrapper">
-          <div className="p-4 sm:p-8">
+        <section className="rounded-2xl overflow-hidden border border-border bg-white" data-testid="home-flipbook-wrapper">
+          <div className="p-2 sm:p-4">
             <FlipbookViewer pdfUrl={magazinePdfUrl(magazine)} />
           </div>
         </section>
@@ -166,25 +173,25 @@ export default function Home() {
         </div>
       )}
 
-      {/* Majalah Lainnya — Bento Grid */}
+      {/* Majalah Lainnya */}
       {others.length > 0 && (
-        <section className="pt-16 border-t border-navy/10">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-navy font-heading tracking-tight">Majalah Lainnya</h2>
+        <section className="pt-8 border-t border-border">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-navy font-heading">Majalah Lainnya</h2>
             <Link
               to="/archive"
-              className="text-sm font-bold text-navy/60 hover:text-gold transition-colors inline-flex items-center gap-1"
+              className="text-sm font-bold text-muted hover:text-gold transition-colors inline-flex items-center gap-1"
               data-testid="home-view-all-others"
             >
               Lihat Semua <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-            {others.map((m, i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            {others.map((m) => (
               <Link
                 to={`/read/${m.id}`}
                 key={m.id}
-                className={`group flex flex-col space-y-3 focus:outline-none ${i === 0 ? "md:col-span-8" : "md:col-span-4"}`}
+                className="group flex flex-col space-y-3 focus:outline-none"
                 data-testid={`home-magazine-card-${m.id}`}
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-navy">
@@ -197,7 +204,7 @@ export default function Home() {
                   ) : (
                     <div className="w-full h-full bg-gray-200 animate-pulse" />
                   )}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[linear-gradient(to_top,rgba(10,10,10,0.5),transparent)]" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-navy/50 to-transparent" />
                 </div>
                 <span className="text-sm font-semibold line-clamp-2 text-navy group-hover:text-gold transition-colors">
                   {m.title}
